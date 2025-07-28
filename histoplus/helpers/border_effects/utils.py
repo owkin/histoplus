@@ -29,6 +29,7 @@ def _fix_invalid_polygon(polygon: Polygon) -> Polygon:
 def build_cell_polygons(
     cell_df: pd.DataFrame, verbose: int
 ) -> tuple[list[Polygon], dict[Polygon, Any]]:
+    """Build cell polygons."""
     cell_polygons = []
     cell_uid = {}
 

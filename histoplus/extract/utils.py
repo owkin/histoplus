@@ -6,7 +6,9 @@ from openslide import OpenSlide
 from openslide.deepzoom import DeepZoomGenerator
 
 from histoplus.helpers.segmentor.base import Segmentor
-from histoplus.helpers.tiling.new_tiling import get_new_tiling_for_target_tile_size_and_deepzoom_level
+from histoplus.helpers.tiling.new_tiling import (
+    get_new_tiling_for_target_tile_size_and_deepzoom_level,
+)
 from histoplus.helpers.tiling.optimal_mpp import get_tiling_slide_level
 
 

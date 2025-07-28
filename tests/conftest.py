@@ -3,9 +3,9 @@
 import numpy as np
 import openslide
 import pytest
+
 from histoplus.helpers.data import SegmentationPolygon, TileSegmentationData
 from histoplus.helpers.nn.common.extractor import TimmExtractor
-from histoplus.helpers.segmentor.maskdino import MaskDINOSegmentor
 
 
 SAGEMAKER_ARTIFACT_BASE_PATH = get_base_artifact_path()
