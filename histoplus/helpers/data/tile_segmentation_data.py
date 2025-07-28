@@ -1,9 +1,12 @@
 """Data class for serializating and deserializing cell masks at the tile level."""
 
 from __future__ import annotations
+
 from dataclasses import dataclass
 from typing import Union
+
 import numpy as np
+
 from histoplus.helpers.data.segmentation_polygon import SegmentationPolygon
 
 

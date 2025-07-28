@@ -12,7 +12,9 @@ B_SIZE = 4
 BIOPTIMUS_STATS = (BIOPTIMUS_MEAN, BIOPTIMUS_STD)
 
 
-@pytest.mark.parametrize("segmentor_fixture", [("maskdino_segmentor", 448, 0.25, *BIOPTIMUS_STATS)])
+@pytest.mark.parametrize(
+    "segmentor_fixture", [("maskdino_segmentor", 448, 0.25, *BIOPTIMUS_STATS)]
+)
 def test_extract(request, segmentor_fixture):
     """Test the extract endpoint."""
     (

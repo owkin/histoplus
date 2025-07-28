@@ -1,6 +1,5 @@
 """Data class for serializating and deserializing segmentation masks."""
 
-
 from dataclasses import dataclass
 from functools import cached_property
 
@@ -28,6 +27,7 @@ class SegmentationPolygon:
     centroid : list[float]
         Centroid coordinates
     """
+
     cell_id: int
     cell_type: str
     confidence: float
