@@ -104,7 +104,7 @@ def extract_cell_segmentation_masks(
 
     # Run the forward pass of the segmentation / classification model and save the raw
     # predicted maps in a temporary file
-    predict_raw_maps(segmentor, dataloader, tmp_dir, buffer_batch_size, verbose)
+    predict_raw_maps(segmentor, dataloader, tmp_dir, verbose)
 
     # Run the appropriate post-processing function to fuse the raw predicted maps into
     # a single instance segmentation map

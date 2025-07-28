@@ -1,11 +1,20 @@
 """Fixtures for the tests."""
 
+from pathlib import Path
+
 import numpy as np
 import openslide
 import pytest
 
 from histoplus.helpers.data import SegmentationPolygon, TileSegmentationData
-from histoplus.helpers.nn.common.extractor import TimmExtractor
+from histoplus.helpers.nn.extractor import TimmExtractor
+
+
+def get_base_artifact_path():
+    """Get base artifact path."""
+    return Path(
+        "/home/sagemaker-user/custom-file-systems/efs/fs-09913c1f7db79b6fd/abstra-ci/artifacts"
+    )
 
 
 SAGEMAKER_ARTIFACT_BASE_PATH = get_base_artifact_path()

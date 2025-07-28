@@ -38,6 +38,7 @@ dependencies = [
   "typer",
   "shapely>=2.1.0",
   "joblib>=1.4.2",
+  "xformers>=0.0.29.post1",
 ]
 
 [project.urls]

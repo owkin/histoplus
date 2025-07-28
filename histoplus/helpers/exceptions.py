@@ -1,4 +1,4 @@
-"""Exceptions raised by the histowmics package."""
+"""Exceptions raised by the Histoplus package."""
 
 
 class MPPNotAvailableError(Exception):
