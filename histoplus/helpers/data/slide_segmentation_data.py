@@ -35,3 +35,4 @@ class SlideSegmentationData:
 
     # Model name
     model_name: str
+
