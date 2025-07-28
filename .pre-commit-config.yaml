@@ -1,0 +1,39 @@
+repos:
+  - repo: https://github.com/pre-commit/pre-commit-hooks
+    rev: v4.4.0
+    hooks:
+      - id: trailing-whitespace
+        name: Trim trailing whitespace
+      - id: end-of-file-fixer
+        name: Fix end of files
+        exclude: \.ipynb$
+  - repo: local
+    hooks:
+      # Linter
+      - id: ruff-linter
+        name: Lint with `ruff`
+        language: system
+        types: [python]
+        require_serial: true
+        entry: uv run ruff check
+        args: [--fix]
+        files: ^(histoplus|tests)/
+        exclude: (.*pb2\.py$|tests/cli/test_cli\.py$)
+      # Formatter
+      - id: ruff-format
+        name: Format with `ruff`
+        language: system
+        types: [python]
+        require_serial: true
+        entry: uv run ruff format
+        files: ^(histoplus|tests)/
+        exclude: .*pb2\.py$
+      # Type checker
+      - id: mypy
+        name: Test typing with `mypy`
+        language: system
+        types: [python]
+        require_serial: true
+        entry: uv run mypy
+        files: ^histoplus/
+        exclude: .*pb2\.py$
