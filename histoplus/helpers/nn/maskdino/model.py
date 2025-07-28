@@ -1,4 +1,5 @@
 """Implementation of the MaskDINO model."""
+import torch
 from torch import nn
 
 class MaskDINO(nn.Module):
@@ -19,4 +20,8 @@ class MaskDINO(nn.Module):
         self.inference_image_size = inference_image_size
         self.cell_type_mapping = cell_type_mapping
         self.output_layers = output_layers
+        # TODO
+    
+    def forward(self, images: torch.Tensor) -> dict[str, torch.Tensor]:
+        """Run the forward pass of the model."""
         # TODO
