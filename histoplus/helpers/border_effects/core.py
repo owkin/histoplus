@@ -2,9 +2,6 @@
 
 import numpy as np
 
-from histoplus.extract.utils import (
-    rescale_cell_mask_coordinates_to_original_resolution,
-)
 from histoplus.helpers.types import TilePrediction
 
 from .overlap import remove_overlapping_cells
@@ -12,6 +9,7 @@ from .project import (
     assign_cells_back_to_original_tiling,
     project_all_cells_to_global_coordinate_system,
 )
+from .utils import rescale_cell_mask_coordinates_to_original_resolution
 
 
 def fix_border_effects(

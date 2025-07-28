@@ -3,20 +3,10 @@
 from abc import ABC, abstractmethod
 from collections import OrderedDict
 from collections.abc import Sequence
-from typing import Callable, Optional
+from typing import Optional
 
 import torch
 from torch import nn
-from torch.nn.parameter import Parameter
-
-from histowmics.helpers.constants import BIOPTIMUS_MEAN, BIOPTIMUS_STD
-
-from .utils import interpolate_positional_encoding
-from .vit import (
-    MultiFeaturesVisionTransformer,
-    module_fn_vit_base,
-    module_fn_vit_base_s14,
-)
 
 
 class Extractor(nn.Module, ABC):

@@ -1,4 +1,4 @@
-"""Unit and integration tests for :mod:`histowmics.utils.models`."""
+"""Unit and integration tests for :mod:`histoplus.utils.models`."""
 
 import pytest
 import torch
@@ -19,7 +19,6 @@ dummy_tissue_mapping = {i: str(i) for i in range(NUMBER_TISSUE_TYPES)}
             cell_type_mapping=dummy_mapping,
             mpp=1.0,
             output_layers=OUT_LAYERS,
-            backbone_weights_pretraining="aquavit_105k",
             train_image_size=448,
             inference_image_size=448,
         ),

@@ -144,13 +144,12 @@ def extract(
             verbose=verbose,
         )
 
-        slide_data = SlideSegmentationData.from_predictions(
+        slide_data = SlideSegmentationData(
             slide_path=slide_path,
             mpp=inference_segmentor.target_mpp,  # MPP used for the inference!
             cell_masks=cell_masks,
             coords=truncated_features[:, 1:3],
             level=int(features[0, 0]),  # Original level of the tile
-            max_level=deepzoom.level_count - 1,
             tile_size=tile_size,  # Original tile size given by the user
             model_name=inference_segmentor.segmentor_name,
         )
