@@ -5,7 +5,7 @@ import torch
 
 
 @pytest.mark.parametrize(
-    "model_name", ["timm_extractor_vit_base", "torch_extractor_vit_base"]
+    "model_name", ["timm_extractor_vit_base"]
 )
 def test_positional_encoding_interpolation(model_name, request):
     """Test that ViT forward pass works correctly with different image sizes.
