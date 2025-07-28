@@ -2,10 +2,10 @@
 
 import numpy as np
 
-from histowmics.extract.utils import (
+from histoplus.extract.utils import (
     rescale_cell_mask_coordinates_to_original_resolution,
 )
-from histowmics.helpers.types import TilePrediction
+from histoplus.helpers.types import TilePrediction
 
 from .overlap import remove_overlapping_cells
 from .project import (

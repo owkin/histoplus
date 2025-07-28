@@ -36,7 +36,6 @@ dependencies = [
   "tqdm>=4.66.5",
   "loguru>=0.7.2",
   "typer",
-  "xformers>=0.0.29.post1",
   "shapely>=2.1.0",
   "joblib>=1.4.2",
 ]
