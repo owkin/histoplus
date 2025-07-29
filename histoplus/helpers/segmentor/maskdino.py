@@ -1,13 +1,11 @@
 """MaskDINO segmentor."""
 from __future__ import annotations
 
-from pathlib import Path
-from typing import Callable, Literal, Union
+from typing import Callable, Union
 
 import torch
 from torchvision.transforms import Compose, Normalize, ToTensor
 
-from histoplus.helpers.nn.maskdino import MaskDINO
 from .base import Segmentor
 
 

@@ -13,7 +13,7 @@ from openslide.deepzoom import DeepZoomGenerator
 
 from histoplus.helpers.constants import INFERENCE_TILE_SIZE, OutputFileType
 from histoplus.helpers.exceptions import MPPNotAvailableError
-from histoplus.helpers.segmentor import Segmentor, MaskDINOSegmentor
+from histoplus.helpers.segmentor import MaskDINOSegmentor, Segmentor
 from histoplus.helpers.tiling.optimal_mpp import get_tiling_slide_level
 
 

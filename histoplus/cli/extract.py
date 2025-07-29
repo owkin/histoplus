@@ -17,8 +17,8 @@ from histoplus.cli.utils import (
     get_optimal_segmentor_for_slide,
 )
 from histoplus.extract import extract
-from histoplus.helpers.exceptions import MPPNotAvailableError
 from histoplus.helpers.constants import OutputFileType
+from histoplus.helpers.exceptions import MPPNotAvailableError
 
 
 Image.MAX_IMAGE_PIXELS = None
@@ -100,7 +100,7 @@ def extract_command(
         slides, features, export_dir
     )
 
-    for slide_idx, (slide_path, features_path) in enumerate(zip(slide_paths, features_paths)):
+    for slide_idx, (slide_path, features_path) in enumerate(zip(slide_paths, features_paths, strict=False)):
         logger.info(
             f"{slide_idx + 1}/{len(slide_paths)} --- Starting processing of {slide_path.name}"
         )

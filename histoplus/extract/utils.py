@@ -1,7 +1,6 @@
 """Check performed to validate the parameters passed to the extract function."""
 
 import numpy as np
-import pandas as pd
 from openslide import OpenSlide
 from openslide.deepzoom import DeepZoomGenerator
 
@@ -14,12 +13,13 @@ from histoplus.helpers.tiling.optimal_mpp import get_tiling_slide_level
 
 def get_tile_coordinates_and_deepzoom_for_segmentor(
     slide: OpenSlide,
-    features: np.ndarray,
+    coords: np.ndarray,
+    original_deepzoom_level: int,
     segmentor: Segmentor,
     original_tile_size: int,
     inference_tile_overlap: int,
     verbose: int,
-) -> tuple[np.ndarray, DeepZoomGenerator, int, int]:
+) -> tuple[np.ndarray, DeepZoomGenerator, int]:
     """Get tile coordinates and the DeepZoom object of the slide expected by the segmentor.
 
     This is used to create the tiling at the expected MPP and with the expected tile size
@@ -30,8 +30,12 @@ def get_tile_coordinates_and_deepzoom_for_segmentor(
     slide : OpenSlide
         The slide object.
 
-    features : np.ndarray
-        Features from the TilingTool.
+    coords : np.ndarray
+        Tile coordinates from the TilingTool.
+
+    original_deepzoom_level : int
+        DeepZoom level of the features provided by the user. Most likely the level at
+        MPP 0.5, used by the TilingTool.
 
     segmentor : Segmentor
         Segmentor object.
@@ -51,16 +55,9 @@ def get_tile_coordinates_and_deepzoom_for_segmentor(
         Associated DeepZoom object to the slide.
 
     int
-        DeepZoom level of the features provided by the user. Most likely the level at
-        MPP 0.5, used by the TilingTool.
-
-    int
         DeepZoom level associated to the target MPP of the segmentor. If the segmentor
         predicts cells at MPP 0.25, this is the corresponding level.
     """
-    coords = features[:, 1:3]
-    original_deepzoom_level = int(features[0, 0])
-
     inference_tile_size_without_overlap = (
         segmentor.inference_image_size - 2 * inference_tile_overlap
     )
@@ -87,5 +84,5 @@ def get_tile_coordinates_and_deepzoom_for_segmentor(
         target_deepzoom_level=target_deepzoom_level,
     )
 
-    return new_coords, deepzoom, original_deepzoom_level, target_deepzoom_level
+    return new_coords, deepzoom, target_deepzoom_level
 

@@ -12,7 +12,6 @@ from histoplus.extract.utils import get_tile_coordinates_and_deepzoom_for_segmen
 from histoplus.helpers.constants import (
     DEFAULT_BUFFER_BATCH_SIZE,
     INFERENCE_TILE_OVERLAP,
-    INFERENCE_TILE_SIZE,
 )
 from histoplus.helpers.data.slide_segmentation_data import SlideSegmentationData
 from histoplus.helpers.segmentor import Segmentor
@@ -93,29 +92,14 @@ def extract(
     SlideSegmentationData
         The segmentation masks and cell classes.
     """
-    if not segmentor.train_image_size:
-        raise AttributeError(
-            "Train image size is necessary to yield tiles. If you are using a custom "
-            "model weights, you can use 224."
-        )
+    original_coords = features[:, 1:3]
+    original_dz_level = int(features[0, 0])
 
-    if not segmentor.inference_image_size:
-        raise AttributeError(
-            "Inference image size is necessary to yield tiles. If you are using a "
-            f"custom model weights, you can use {INFERENCE_TILE_SIZE}."
-        )
-
-    if random_sampling:
-        rng = np.random.RandomState(seed=seed)
-        rng.shuffle(features)
-
-    truncated_features = features[:n_tiles]
-    original_coords = truncated_features[:, 1:3]
-
-    coarse_coords, deepzoom, original_dz_level, extraction_dz_level = (
+    coarse_coords, deepzoom, extraction_dz_level = (
         get_tile_coordinates_and_deepzoom_for_segmentor(
             slide,
-            truncated_features,
+            original_coords,
+            original_dz_level,
             segmentor,
             original_tile_size=tile_size,
             inference_tile_overlap=inference_tile_overlap,
@@ -145,8 +129,8 @@ def extract(
             slide_path=slide_path,
             mpp=inference_segmentor.target_mpp,  # MPP used for the inference!
             cell_masks=cell_masks,
-            coords=truncated_features[:, 1:3],
-            level=int(features[0, 0]),  # Original level of the tile
+            coords=original_coords,
+            level=original_dz_level,  # Original level of the tile
             tile_size=tile_size,  # Original tile size given by the user
             model_name=inference_segmentor.segmentor_name,
         )
