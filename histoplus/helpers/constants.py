@@ -1,4 +1,5 @@
 """Constants for the histoplus package."""
+
 from enum import Enum
 
 

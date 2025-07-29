@@ -6,7 +6,7 @@ The CLI provides a simplified way to extract cell masks from slides.
 """
 
 from pathlib import Path
-from typing import List, Optional
+from typing import List
 
 import typer
 
@@ -33,7 +33,7 @@ def extract_wrapper(
         help="Path(s) to features. Parent directory should match slides names. "
         "Can contain shell-style wildcards. Compatible with s3 path.",
     ),
-    export_dir: Optional[Path] = typer.Option(
+    export_dir: Path = typer.Option(
         None,
         "--export_dir",
         "-e",

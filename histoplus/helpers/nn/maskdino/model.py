@@ -1,4 +1,5 @@
 """Implementation of the MaskDINO model."""
+
 import torch
 from torch import nn
 

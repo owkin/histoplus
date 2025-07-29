@@ -89,16 +89,8 @@ def collect_paths(paths: list[str]) -> list[Path]:
     """
     result = []
     for path in paths:
-        # For S3 paths, we parse the name of the bucket, the prefix and the folder path and use S3Path.glob
-        if str(path).startswith("s3://"):
-            bucket, prefix, path = (
-                path.split("/")[2],
-                path.split("/")[3],
-                "/".join(path.split("/")[4:]),
-            )
-            result += list(Path(f"s3://{bucket}/{prefix}/").glob(path))
         # For URLs, we directly add the path
-        elif is_url(str(path)):
+        if is_url(str(path)):
             result.append(path)
         # For local paths, we use the standard glob
         else:
@@ -217,9 +209,7 @@ def _get_best_available_mpp(slide: OpenSlide, verbose: int) -> float:
     deepzoom = DeepZoomGenerator(slide, tile_size=224, overlap=0, limit_bounds=False)
 
     try:
-        dz_level = get_tiling_slide_level(
-            slide, deepzoom, mpp=0.25, verbose=verbose
-        )
+        dz_level = get_tiling_slide_level(slide, deepzoom, mpp=0.25, verbose=verbose)
         if verbose:
             logger.success(
                 f"Found DeepZoom level corresponding to MPP 0.25 ({dz_level})!"
@@ -227,9 +217,7 @@ def _get_best_available_mpp(slide: OpenSlide, verbose: int) -> float:
         best_mpp = 0.25
     except MPPNotAvailableError:
         try:
-            dz_level = get_tiling_slide_level(
-                slide, deepzoom, mpp=0.5, verbose=verbose
-            )
+            dz_level = get_tiling_slide_level(slide, deepzoom, mpp=0.5, verbose=verbose)
             if verbose:
                 logger.warning(
                     "Could not find DeepZoom level for MPP 0.25. Falling back to MPP 0.5."

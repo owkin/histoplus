@@ -1,4 +1,5 @@
 """Operation implementation."""
+
 from typing import Callable
 
 from torch import nn

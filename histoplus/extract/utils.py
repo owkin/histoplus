@@ -85,4 +85,3 @@ def get_tile_coordinates_and_deepzoom_for_segmentor(
     )
 
     return new_coords, deepzoom, target_deepzoom_level
-

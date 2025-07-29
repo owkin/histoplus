@@ -25,30 +25,27 @@ Image.MAX_IMAGE_PIXELS = None
 
 
 def _launch_extraction(
-    slide_path_str: str,
-    features_path_str: str,
-    export_dir: str,
+    slide_path: Path,
+    features_path: Path,
+    export_dir: Path,
     tile_size: int,
     batch_size: int,
     n_workers: int,
     verbose: int,
 ) -> None:
     """Extract cell masks from a slide using HistoPLUS segmentation."""
-    slide_path = Path(slide_path_str)
-    export_dir = Path(export_dir)
-
     slide_export_dir = export_dir / slide_path.name
 
     slide_cell_masks_path = slide_export_dir / OutputFileType.JSON_CELL_MASKS.value
 
     try:
-        slide = openslide.OpenSlide(slide_path_str)
+        slide = openslide.OpenSlide(str(slide_path))
 
         segmentor = get_optimal_segmentor_for_slide(slide, verbose)
 
         slide_export_dir.mkdir(exist_ok=True, parents=True)
 
-        features_arr = np.load(features_path_str)
+        features_arr = np.load(features_path)
 
         try:
             cell_segmentation_data = extract(
@@ -100,7 +97,9 @@ def extract_command(
         slides, features, export_dir
     )
 
-    for slide_idx, (slide_path, features_path) in enumerate(zip(slide_paths, features_paths, strict=False)):
+    for slide_idx, (slide_path, features_path) in enumerate(
+        zip(slide_paths, features_paths, strict=False)
+    ):
         logger.info(
             f"{slide_idx + 1}/{len(slide_paths)} --- Starting processing of {slide_path.name}"
         )
@@ -110,7 +109,7 @@ def extract_command(
         _launch_extraction(
             slide_path=slide_path,
             features_path=features_path,
-            export_dir=str(export_dir),
+            export_dir=export_dir,
             tile_size=tile_size,
             n_workers=n_workers,
             batch_size=batch_size,
@@ -120,4 +119,3 @@ def extract_command(
         logger.info(
             f"{slide_idx + 1}/{len(slide_paths)} --- Finished processing of {slide_path.name} in {time.time() - start:.1f} seconds"
         )
-
