@@ -30,7 +30,7 @@ def extract_cell_segmentation_masks(
     buffer_batch_size: int = 10,
     inference_tile_overlap: int = INFERENCE_TILE_OVERLAP,
     verbose: int = 1,
-) -> tuple[list[TilePrediction], Segmentor]:
+) -> list[TilePrediction]:
     """Use a cell segmentation model to extract cell segmentation masks from a WSI.
 
     Parameters
@@ -88,9 +88,6 @@ def extract_cell_segmentation_masks(
     -------
     list[TilePrediction]
         The segmentation masks and cell classes.
-
-    Segmentor
-        The segmentor used for the inference.
     """
     dataloader = get_tile_dataloader(
         slide=slide,
@@ -129,4 +126,4 @@ def extract_cell_segmentation_masks(
         verbose=verbose,
     )
 
-    return tile_predictions, segmentor
+    return tile_predictions

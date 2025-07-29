@@ -10,7 +10,7 @@ import numpy as np
 from histoplus.helpers.data.segmentation_polygon import SegmentationPolygon
 
 
-@dataclass
+@dataclass(frozen=True)
 class TileSegmentationData:
     """Data class for storing and manipulating tile-level data."""
 
@@ -37,8 +37,8 @@ class TileSegmentationData:
         cls,
         mask_coordinates: list[np.ndarray],
         centroid_coordinates: list[list[float]],
-        cell_types: np.ndarray,
-        probabilities: np.ndarray,
+        cell_types: list[str],
+        probabilities: list[float],
         metadata: dict[str, Union[str, int, float]],
     ) -> TileSegmentationData:
         """Create a TileSegmentationData object from the model predictions.
@@ -49,9 +49,9 @@ class TileSegmentationData:
             Segmentation masks. Each np.ndarray is of shape [polygon_length, 2].
         centroids : list[list[float]]
             Centroid coordinates of the segmentation masks.
-        cell_types : np.ndarray, shape [n_instances]
+        cell_types : list[str]
             Cell type identifiers.
-        probabilities : np.ndarray, shape [n_instances]
+        probabilities : list[float]
             Cell type confidence scores.
         metadata : dict[str, Union[str, int, float]]
             Metadata of the tile.
