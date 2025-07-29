@@ -1,4 +1,12 @@
 """Constants for the histoplus package."""
+from enum import Enum
+
+
+class OutputFileType(Enum):
+    """Output file types."""
+
+    JSON_CELL_MASKS = "cell_masks.json"
+
 
 """Normalization statistics of Bioptimus extractor."""
 BIOPTIMUS_MEAN = (0.707223, 0.578729, 0.703617)

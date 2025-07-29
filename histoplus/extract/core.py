@@ -2,7 +2,7 @@
 
 import tempfile
 from pathlib import Path
-from typing import Optional, Union
+from typing import Union
 
 import numpy as np
 from openslide import OpenSlide
@@ -24,13 +24,10 @@ def extract(
     slide_path: Union[str, Path],
     segmentor: Segmentor,
     tile_size: int = 224,
-    n_tiles: Optional[int] = None,
     n_workers: int = 4,
     batch_size: int = 16,
     buffer_batch_size: int = DEFAULT_BUFFER_BATCH_SIZE,
     inference_tile_overlap: int = INFERENCE_TILE_OVERLAP,
-    random_sampling: bool = False,
-    seed: int = 42,
     verbose: int = 1,
 ) -> SlideSegmentationData:
     """Extract cell segmentation masks from a whole slide image.
