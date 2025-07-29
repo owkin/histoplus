@@ -1,7 +1,9 @@
 """Operation implementation."""
+
 from typing import Callable
-from xformers.ops import SwiGLU
+
 from torch import nn
+from xformers.ops import SwiGLU
 
 
 class SwiGLUFFNFused(SwiGLU):

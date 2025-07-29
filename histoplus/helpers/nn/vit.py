@@ -7,19 +7,8 @@ ruff: disable=N801
 
 from __future__ import annotations
 
-import math
-from collections import OrderedDict
-from collections.abc import Sequence
-from functools import partial
-from typing import Callable, Optional
-
 import timm
-import torch
 from timm.models.vision_transformer import VisionTransformer as TimmVisionTransformer
-from torch import nn
-from torch.nn import functional as F
-from torchvision.models import VisionTransformer
-from torchvision.models.vision_transformer import ConvStemConfig, Encoder
 
 from .ops import SwiGLUFFNFused
 
