@@ -9,33 +9,60 @@ from typing import Union
 
 import numpy as np
 
+from histoplus.helpers.data.tile_segmentation_data import TileSegmentationData
 from histoplus.helpers.types import TilePrediction
 
 
-@dataclass
+@dataclass(frozen=True)
 class SlideSegmentationData:
     """Main data structure for storing and manipulating slide-level data."""
 
-    # Path to the slide
-    slide_path: Union[str, Path]
+    # Model name used for the inference
+    model_name: str
 
-    # MPP of the slide
-    mpp: float
+    # MPP used for the inference
+    inference_mpp: float
 
     # Cell masks organized in tiles
-    cell_masks: list[TilePrediction]
+    cell_masks: list[TileSegmentationData]
 
-    # Coordinates of the tiles
-    coords: np.ndarray
+    @classmethod
+    def from_predictions(
+        cls,
+        model_name: str,
+        inference_mpp: float,
+        deepzoom_level: int,
+        tile_size: int,
+        tile_coordinates: np.ndarray,
+        tile_predictions: list[TilePrediction],
+    ) -> SlideSegmentationData:
+        """Create a SlideSegmentationData object from the model predictions."""
+        assert len(tile_coordinates) == len(tile_predictions)
 
-    # DeepZoom level of the tiles
-    level: int
+        cell_masks = []
 
-    # Tile size
-    tile_size: int
+        for tile_idx, tile_prediction in enumerate(tile_predictions):
+            cell_masks.append(
+                TileSegmentationData.from_predictions(
+                    mask_coordinates=tile_prediction.contours,
+                    centroid_coordinates=tile_prediction.centroids,
+                    cell_types=tile_prediction.cell_types,
+                    probabilities=tile_prediction.cell_type_probabilities,
+                    metadata={
+                        "level": deepzoom_level,
+                        "x": tile_coordinates[tile_idx, 0],
+                        "y": tile_coordinates[tile_idx, 1],
+                        "width": tile_size,
+                        "height": tile_size,
+                    },
+                )
+            )
 
-    # Model name
-    model_name: str
+        return cls(
+            model_name=model_name,
+            inference_mpp=inference_mpp,
+            cell_masks=cell_masks,
+        )
 
     def save(self, path: Union[str, Path]) -> None:
         """Save the slide segmentation data to a file."""

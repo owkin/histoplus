@@ -51,7 +51,6 @@ def _launch_extraction(
             cell_segmentation_data = extract(
                 slide=slide,
                 features=features_arr,
-                slide_path=slide_path,
                 segmentor=segmentor,
                 tile_size=tile_size,
                 n_workers=n_workers,

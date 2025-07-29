@@ -1,8 +1,6 @@
 """Extract cell segmentation masks from a whole slide image."""
 
 import tempfile
-from pathlib import Path
-from typing import Union
 
 import numpy as np
 from openslide import OpenSlide
@@ -20,7 +18,6 @@ from histoplus.helpers.segmentor import Segmentor
 def extract(
     slide: OpenSlide,
     features: np.ndarray,
-    slide_path: Union[str, Path],
     segmentor: Segmentor,
     tile_size: int = 224,
     n_workers: int = 4,
@@ -108,7 +105,7 @@ def extract(
     )
 
     with tempfile.TemporaryDirectory(prefix="cell_segmentation_") as tmp_dir:
-        cell_masks, inference_segmentor = extract_cell_segmentation_masks(
+        tile_predictions = extract_cell_segmentation_masks(
             slide=slide,
             deepzoom=deepzoom,
             original_dz_level=original_dz_level,
@@ -125,14 +122,13 @@ def extract(
             verbose=verbose,
         )
 
-        slide_data = SlideSegmentationData(
-            slide_path=slide_path,
-            mpp=inference_segmentor.target_mpp,  # MPP used for the inference!
-            cell_masks=cell_masks,
-            coords=original_coords,
-            level=original_dz_level,  # Original level of the tile
-            tile_size=tile_size,  # Original tile size given by the user
-            model_name=inference_segmentor.segmentor_name,
+        slide_data = SlideSegmentationData.from_predictions(
+            model_name=segmentor.segmentor_name,
+            inference_mpp=segmentor.target_mpp,
+            deepzoom_level=original_dz_level,
+            tile_size=tile_size,
+            tile_coordinates=original_coords,
+            tile_predictions=tile_predictions,
         )
 
     return slide_data
