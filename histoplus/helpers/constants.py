@@ -1,6 +1,15 @@
 """Constants for the histoplus package."""
 import torch
 
+from enum import Enum
+
+
+class OutputFileType(Enum):
+    """Output file types."""
+
+    JSON_CELL_MASKS = "cell_masks.json"
+
+
 """Normalization statistics of Bioptimus extractor."""
 BIOPTIMUS_MEAN = (0.707223, 0.578729, 0.703617)
 BIOPTIMUS_STD = (0.211883, 0.230117, 0.177517)
