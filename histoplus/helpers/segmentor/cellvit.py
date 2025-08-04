@@ -3,7 +3,7 @@
 from __future__ import annotations
 
 from pathlib import Path
-from typing import Callable, Optional, Union
+from typing import Union
 
 import torch
 from torchvision.transforms import Compose, Normalize, ToTensor
@@ -15,8 +15,8 @@ from histoplus.helpers.hub import (
 )
 from histoplus.helpers.mixed_precision import prepare_module
 from histoplus.helpers.nn.cellvit.model import CellViT
-from histoplus.helpers.segmentor.base import Segmentor
 from histoplus.helpers.postprocessor import CellViTPostprocessor
+from histoplus.helpers.segmentor.base import Segmentor
 
 
 MODEL_FUNCS_FOR_VERSION = {

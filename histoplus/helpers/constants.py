@@ -1,7 +1,8 @@
 """Constants for the histoplus package."""
-import torch
 
 from enum import Enum
+
+import torch
 
 
 class OutputFileType(Enum):
