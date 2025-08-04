@@ -3,7 +3,7 @@
 import pytest
 import torch
 
-from histoplus.helpers.nn.maskdino import MaskDINO
+from histoplus.helpers.nn.cellvit import CellViT
 
 
 NUMBER_CELL_TYPES = 15
@@ -15,10 +15,11 @@ dummy_tissue_mapping = {i: str(i) for i in range(NUMBER_TISSUE_TYPES)}
 
 @pytest.fixture(
     params=[
-        MaskDINO(
+        CellViT(
             cell_type_mapping=dummy_mapping,
             mpp=1.0,
             output_layers=OUT_LAYERS,
+            backbone_weights_pretraining="aquavit_105k",
             train_image_size=448,
             inference_image_size=448,
         ),
@@ -36,4 +37,6 @@ def test_cell_segmentation_model_forward(cell_segmentation_model):
     cell_segmentation_model.eval()
     cell_segmentation_model.to("cpu")
     outputs = cell_segmentation_model.forward(img)
-    # TODO: assert
+    assert outputs["np"].shape == (1, 2, input_size, input_size)
+    assert outputs["tp"].shape == (1, NUMBER_CELL_TYPES, input_size, input_size)
+    assert outputs["hv"].shape == (1, 2, input_size, input_size)

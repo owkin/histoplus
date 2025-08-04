@@ -1,7 +1,11 @@
 """Utilities functions."""
 
+from typing import Literal
 import torch
 from torch.nn import functional as F
+
+
+PretrainedBackboneWeight = Literal["aquavit_105k"]
 
 
 def interpolate_positional_encoding(
@@ -109,3 +113,4 @@ def interpolate_positional_encoding(
     new_pos_emb = new_pos_emb.to(pos_embedding.dtype)
 
     return new_pos_emb
+
