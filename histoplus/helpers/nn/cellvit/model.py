@@ -13,8 +13,8 @@ from histoplus.helpers.nn.cellvit.decoder import (
     CellViTNeck,
     DecoderBranch,
 )
-from histoplus.helpers.nn.extractor import TimmExtractor
-from histoplus.helpers.nn.utils import PretrainedBackboneWeight, get_extractor
+from histoplus.helpers.nn.extractor import TimmExtractor, get_extractor
+from histoplus.helpers.nn.utils import PretrainedBackboneWeight
 
 
 class CellViTBase(nn.Module, ABC):

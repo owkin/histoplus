@@ -4,9 +4,6 @@ from typing import Literal
 import torch
 from torch.nn import functional as F
 
-from histoplus.helpers.nn.extractor.base import Extractor
-from histoplus.helpers.nn.extractor.timm import TimmExtractor
-
 
 PretrainedBackboneWeight = Literal["aquavit_105k"]
 
@@ -117,15 +114,3 @@ def interpolate_positional_encoding(
 
     return new_pos_emb
 
-
-def get_extractor(
-    backbone_weights: PretrainedBackboneWeight,
-    encoder_keys: list[str],
-    tile_size: int,
-) -> Extractor:
-    """Get extractor."""
-    if backbone_weights == "aquavit_105k":
-        return TimmExtractor(
-            model="base_s14", output_layers=encoder_keys, tile_size=tile_size
-        )
-    raise ValueError(f"Unknown backbone weights. Got {backbone_weights}")

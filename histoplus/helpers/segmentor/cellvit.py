@@ -19,7 +19,7 @@ from histoplus.helpers.segmentor.base import Segmentor
 from histoplus.helpers.postprocessor import CellViTPostprocessor
 
 
-MODELS_FUNCS_FOR_VERSION = {
+MODEL_FUNCS_FOR_VERSION = {
     0.5: histoplus_cellvit_segmentor_20x,
     0.25: histoplus_cellvit_segmentor_40x,
 }

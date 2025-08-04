@@ -48,18 +48,12 @@ def extract(
         Therefore, the feature dimension is 2048. If you are using a different feature
         extractor, make sure to specify your own tumor detector model.
 
-    slide_path : Union[str, Path]
-        The path to the slide.
-
     segmentor: torch.nn.Module, optional
         The cell segmentation and classification model to use. If not provided, the
         best model available (developed in the HIPE project) will be used.
 
     tile_size : int, optional
         The size of the tiles to use for the segmentation. Default is 224.
-
-    n_tiles : int, optional
-        The number of tiles to extract. Default is None, meaning all tiles.
 
     n_workers : int, optional
         The number of workers to use for parallel processing. Default is 1.
@@ -74,12 +68,6 @@ def extract(
 
     inference_tile_overlap : int
         Overlap (horizontal and vertical) between two consecutive tiles on the grid.
-
-    random_sampling : bool, optional
-        Whether to use random sampling for tile extraction. Default is False.
-
-    seed : int, optional
-        The seed to use for random sampling. Default is 42.
 
     verbose : int, optional
         If non null, displays message to stdout and tqdm.
