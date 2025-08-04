@@ -8,6 +8,7 @@ import pytest
 
 from histoplus.helpers.data import SegmentationPolygon, TileSegmentationData
 from histoplus.helpers.nn.extractor import TimmExtractor
+from histoplus.helpers.segmentor import CellViTSegmentor
 
 
 def get_base_artifact_path():
@@ -104,9 +105,13 @@ def dummy_tile(dummy_polygon):
 
 
 @pytest.fixture
-def maskdino_segmentor():
-    """Create a MaskDINO segmentor."""
-    return None  # TODO: implement
+def cellvit_segmentor():
+    """Create a CellViT segmentor."""
+    return CellViTSegmentor.from_histoplus(
+        mixed_precision=True,
+        mpp=0.25,
+        inference_image_size=448,
+    )
 
 
 @pytest.fixture

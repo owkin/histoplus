@@ -1,7 +1,6 @@
 """Check performed to validate the parameters passed to the extract function."""
 
 import numpy as np
-import pandas as pd
 from openslide import OpenSlide
 from openslide.deepzoom import DeepZoomGenerator
 
@@ -88,4 +87,3 @@ def get_tile_coordinates_and_deepzoom_for_segmentor(
     )
 
     return new_coords, deepzoom, original_deepzoom_level, target_deepzoom_level
-

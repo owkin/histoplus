@@ -1,7 +1,7 @@
 """Segmentor implementation."""
 
 from .base import Segmentor
-from .maskdino import MaskDINOSegmentor
+from .cellvit import CellViTSegmentor
 
 
-__all__ = ["Segmentor", "MaskDINOSegmentor"]
+__all__ = ["Segmentor", "CellViTSegmentor"]

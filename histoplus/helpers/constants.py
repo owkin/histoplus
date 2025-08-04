@@ -1,4 +1,5 @@
 """Constants for the histoplus package."""
+import torch
 
 """Normalization statistics of Bioptimus extractor."""
 BIOPTIMUS_MEAN = (0.707223, 0.578729, 0.703617)
@@ -14,3 +15,8 @@ INFERENCE_TILE_OVERLAP = 64
 adapt for ViT extractors trained with patch sizes of 14 and 16, and its square root
 should be a whole integer. Only one candidate: 784."""
 INFERENCE_TILE_SIZE = 784
+
+"""Default device."""
+DEFAULT_DEVICE = (
+    None if (torch.cuda.is_available() or torch.backends.mps.is_available()) else -1
+)
