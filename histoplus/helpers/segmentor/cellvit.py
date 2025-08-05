@@ -118,3 +118,7 @@ class CellViTSegmentor(Segmentor):
     def mpp(self) -> float:
         """Get the mpp of the model."""
         return self.model.mpp
+
+    def get_postprocess_fn(self) -> Callable:
+        """Get the postprocessing function."""
+        return self.postprocessor.postprocess
