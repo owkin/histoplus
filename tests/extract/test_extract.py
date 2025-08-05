@@ -12,7 +12,7 @@ BATCH_SIZE = 16
 N_TILES = 3
 
 
-@pytest.mark.parametrize("segmentor_fixture", [("maskdino_segmentor", 224, 0.5)])
+@pytest.mark.parametrize("segmentor_fixture", [("cellvit_segmentor", 448, 0.25)])
 def test_extract(request, slide_data, segmentor_fixture):
     """Test the extract endpoint."""
     slide, features = slide_data
@@ -26,13 +26,11 @@ def test_extract(request, slide_data, segmentor_fixture):
     cell_segmentation_data = extract(
         slide=slide,
         features=features,
-        slide_path="",
         segmentor=segmentor,
         tile_size=TILE_SIZE,
-        n_tiles=N_TILES,
         n_workers=N_WORKERS,
         batch_size=BATCH_SIZE,
-        random_sampling=False,
+        n_tiles=N_TILES,
     )
 
     assert cell_segmentation_data.mpp == expected_mpp

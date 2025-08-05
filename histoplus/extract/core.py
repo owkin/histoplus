@@ -1,6 +1,7 @@
 """Extract cell segmentation masks from a whole slide image."""
 
 import tempfile
+from typing import Optional
 
 import numpy as np
 from openslide import OpenSlide
@@ -20,6 +21,7 @@ def extract(
     features: np.ndarray,
     segmentor: Segmentor,
     tile_size: int = 224,
+    n_tiles: Optional[int] = None,
     n_workers: int = 4,
     batch_size: int = 16,
     buffer_batch_size: int = DEFAULT_BUFFER_BATCH_SIZE,
@@ -55,6 +57,9 @@ def extract(
     tile_size : int, optional
         The size of the tiles to use for the segmentation. Default is 224.
 
+    n_tiles : int, optional
+        The number of tiles to infer. By default, all tiles are inferred.
+
     n_workers : int, optional
         The number of workers to use for parallel processing. Default is 1.
 
@@ -77,7 +82,7 @@ def extract(
     SlideSegmentationData
         The segmentation masks and cell classes.
     """
-    original_coords = features[:, 1:3]
+    original_coords = features[:n_tiles, 1:3]
     original_dz_level = int(features[0, 0])
 
     coarse_coords, deepzoom, extraction_dz_level = (

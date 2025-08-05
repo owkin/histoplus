@@ -77,7 +77,7 @@ class histoplus_cellvit_segmentor_40x(PretrainedSegmentor):
     """
 
     name = "histoplus_cellvit_segmentor_40x"
-    weights = "HIPE_models/CellViT/histoplus_cellvit_segmentor_40x.pt"
+    weights = "/home/sagemaker-user/.histowmics/weights/HIPE_models/CellViT/hipe_cellvit_segmentor_v7_40x.pt"
     mpp = 0.25
 
     output_layers = [3, 5, 7, 11]
@@ -131,7 +131,7 @@ class histoplus_cellvit_segmentor_20x(PretrainedSegmentor):
     """
 
     name = "hipe_cellvit_segmentor_20x"
-    weights = "HIPE_models/CellViT/hipe_cellvit_segmentor_v7_20x.pt"
+    weights = "/home/sagemaker-user/.histowmics/weights/HIPE_models/CellViT/hipe_cellvit_segmentor_v7_20x.pt"
     mpp = 0.5
 
     output_layers = [3, 5, 7, 11]

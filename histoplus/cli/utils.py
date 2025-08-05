@@ -13,7 +13,7 @@ from openslide.deepzoom import DeepZoomGenerator
 
 from histoplus.helpers.constants import INFERENCE_TILE_SIZE, OutputFileType
 from histoplus.helpers.exceptions import MPPNotAvailableError
-from histoplus.helpers.segmentor import MaskDINOSegmentor, Segmentor
+from histoplus.helpers.segmentor import CellViTSegmentor, Segmentor
 from histoplus.helpers.tiling.optimal_mpp import get_tiling_slide_level
 
 
@@ -243,8 +243,9 @@ def _get_best_available_segmentor(
     ValueError
         If the specified version by the user is not available for the segmentor.
     """
-    return MaskDINOSegmentor.from_hipe_iteration(
+    return CellViTSegmentor.from_histoplus(
         mpp=mpp,
+        mixed_precision=True,
         inference_image_size=inference_image_size,
     )
 

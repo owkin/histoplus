@@ -3,7 +3,7 @@
 from __future__ import annotations
 
 from pathlib import Path
-from typing import Callable, Optional, Union
+from typing import Callable, Union
 
 import torch
 from torchvision.transforms import Compose, Normalize, ToTensor
@@ -15,11 +15,16 @@ from histoplus.helpers.hub import (
 )
 from histoplus.helpers.mixed_precision import prepare_module
 from histoplus.helpers.nn.cellvit.model import CellViT
-from histoplus.helpers.segmentor.base import Segmentor
 from histoplus.helpers.postprocessor import CellViTPostprocessor
+from histoplus.helpers.segmentor.base import Segmentor
 
 
-MODEL_FUNCS_FOR_VERSION = {
+CellViTModelFn = Union[
+    type[histoplus_cellvit_segmentor_20x], type[histoplus_cellvit_segmentor_40x]
+]
+
+
+MODEL_FUNCS_FOR_VERSION: dict[float, CellViTModelFn] = {
     0.5: histoplus_cellvit_segmentor_20x,
     0.25: histoplus_cellvit_segmentor_40x,
 }
@@ -30,7 +35,7 @@ class CellViTSegmentor(Segmentor):
 
     def __init__(
         self,
-        model: torch.nn.Module,
+        model: CellViT,
         segmentor_name: str,
         mean: tuple[float, float, float],
         std: tuple[float, float, float],
@@ -45,8 +50,8 @@ class CellViTSegmentor(Segmentor):
         self.model = prepare_module(model, gpu, mixed_precision)
         self.segmentor_name = segmentor_name
 
-        self.train_image_size = self.model.train_image_size
-        self.target_mpp = self.model.mpp
+        self.train_image_size = model.train_image_size
+        self.target_mpp = model.mpp
 
         self.mean = mean
         self.std = std
@@ -89,12 +94,8 @@ class CellViTSegmentor(Segmentor):
         try:
             return MODEL_FUNCS_FOR_VERSION[mpp]
         except KeyError as exc_mpp:
-            available_versions = ", ".join(
-                list(map(str, models_funcs_for_version.keys()))
-            )
             raise ValueError(
-                f"The requested MPP is not available for version {version}. "
-                f"Available versions are {available_versions}."
+                "The requested MPP is not available for version. "
             ) from exc_mpp
 
     @classmethod
@@ -107,7 +108,7 @@ class CellViTSegmentor(Segmentor):
         """Get the best checkpoint from HIPE iterations."""
         model_fn = cls._get_model_fn(mpp)
         return cls(
-            model=model_fn(inference_image_size),
+            model=model_fn(inference_image_size),  # type: ignore
             segmentor_name=model_fn.name,
             mean=model_fn.mean,
             std=model_fn.std,
@@ -117,4 +118,8 @@ class CellViTSegmentor(Segmentor):
     @property
     def mpp(self) -> float:
         """Get the mpp of the model."""
-        return self.model.mpp
+        return self.target_mpp
+
+    def get_postprocess_fn(self) -> Callable:
+        """Get the postprocessing function."""
+        return self.postprocessor.postprocess
