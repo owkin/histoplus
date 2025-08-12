@@ -1,10 +1,6 @@
 """Unit tests for the CLI."""
 
-import math
 from unittest.mock import MagicMock
-
-import pandas as pd
-import pytest
 
 from histoplus.cli.extract import extract_command
 from histoplus.helpers.constants import (

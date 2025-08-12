@@ -67,7 +67,7 @@ class SlideSegmentationData:
     @classmethod
     def load(cls, path: Union[str, Path]) -> SlideSegmentationData:
         """Load a SlideSegmentationData object from a path."""
-        with open(path, 'r') as fin:
+        with open(path, "r") as fin:
             raw_json = json.load(fin)
         return cls(**raw_json)
 

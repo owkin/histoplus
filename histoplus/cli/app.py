@@ -48,7 +48,7 @@ def extract_wrapper(
     n_tiles: Optional[int] = typer.Option(
         None,
         "--n_tiles",
-        help="Number of tiles to extract. If None, all the tiles are extracted."
+        help="Number of tiles to extract. If None, all the tiles are extracted.",
     ),
     # Processing parameters
     n_workers: int = typer.Option(

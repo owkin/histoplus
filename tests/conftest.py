@@ -7,7 +7,6 @@ from pathlib import Path
 import numpy as np
 import openslide
 import pytest
-
 from typer.testing import CliRunner
 
 from histoplus.helpers.data import SegmentationPolygon, TileSegmentationData

@@ -2,8 +2,6 @@
 
 from unittest.mock import MagicMock, patch
 
-import pytest
-
 from histoplus.cli.utils import get_optimal_segmentor_for_slide
 
 
