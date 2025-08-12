@@ -2,7 +2,7 @@
 
 import time
 from pathlib import Path
-from typing import List
+from typing import List, Optional
 
 import numpy as np
 import openslide
@@ -29,6 +29,7 @@ def _launch_extraction(
     features_path: Path,
     export_dir: Path,
     tile_size: int,
+    n_tiles: Optional[int],
     batch_size: int,
     n_workers: int,
     verbose: int,
@@ -53,6 +54,7 @@ def _launch_extraction(
                 features=features_arr,
                 segmentor=segmentor,
                 tile_size=tile_size,
+                n_tiles=n_tiles,
                 n_workers=n_workers,
                 batch_size=batch_size,
                 verbose=verbose,
@@ -83,6 +85,7 @@ def extract_command(
     features: List[str],
     export_dir: Path,
     tile_size: int,
+    n_tiles: Optional[int],
     n_workers: int,
     batch_size: int,
     verbose: int,
@@ -109,6 +112,7 @@ def extract_command(
             slide_path=slide_path,
             features_path=features_path,
             export_dir=export_dir,
+            n_tiles=n_tiles,
             tile_size=tile_size,
             n_workers=n_workers,
             batch_size=batch_size,

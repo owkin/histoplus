@@ -64,6 +64,13 @@ class SlideSegmentationData:
             cell_masks=cell_masks,
         )
 
+    @classmethod
+    def load(cls, path: Union[str, Path]) -> SlideSegmentationData:
+        """Load a SlideSegmentationData object from a path."""
+        with open(path, 'r') as fin:
+            raw_json = json.load(fin)
+        return cls(**raw_json)
+
     def save(self, path: Union[str, Path]) -> None:
         """Save the slide segmentation data to a file."""
         with open(path, "w") as f:

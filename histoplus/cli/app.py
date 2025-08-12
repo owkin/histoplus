@@ -6,7 +6,7 @@ The CLI provides a simplified way to extract cell masks from slides.
 """
 
 from pathlib import Path
-from typing import List
+from typing import List, Optional
 
 import typer
 
@@ -45,6 +45,11 @@ def extract_wrapper(
         "--tile_size",
         help="Size of tiles to extract",
     ),
+    n_tiles: Optional[int] = typer.Option(
+        None,
+        "--n_tiles",
+        help="Number of tiles to extract. If None, all the tiles are extracted."
+    ),
     # Processing parameters
     n_workers: int = typer.Option(
         4,
@@ -70,6 +75,7 @@ def extract_wrapper(
         features=features,
         export_dir=export_dir,
         tile_size=tile_size,
+        n_tiles=n_tiles,
         n_workers=n_workers,
         batch_size=batch_size,
         verbose=verbose,
