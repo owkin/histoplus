@@ -13,7 +13,7 @@ import typer
 from histoplus.cli.extract import extract_command
 
 
-app = typer.Typer(help="Histoplus CLI")
+app = typer.Typer(help="HistoPLUS CLI")
 
 
 @app.command(name="extract")
