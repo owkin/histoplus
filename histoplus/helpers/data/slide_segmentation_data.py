@@ -3,13 +3,14 @@
 from __future__ import annotations
 
 import json
-from dataclasses import dataclass
+from dataclasses import dataclass, asdict
 from pathlib import Path
 from typing import Union
 
 import numpy as np
 
 from histoplus.helpers.data.tile_segmentation_data import TileSegmentationData
+from histoplus.helpers.data.segmentation_polygon import SegmentationPolygon
 from histoplus.helpers.types import TilePrediction
 
 
@@ -69,9 +70,31 @@ class SlideSegmentationData:
         """Load a SlideSegmentationData object from a path."""
         with open(path, "r") as fin:
             raw_json = json.load(fin)
-        return cls(**raw_json)
+
+        # Reconstruct nested dataclasses
+        raw_cell_masks = raw_json.get("cell_masks", [])
+        cell_masks: list[TileSegmentationData] = []
+        for tile_dict in raw_cell_masks:
+            masks_dicts = tile_dict.get("masks", [])
+            masks = [SegmentationPolygon(**mask_dict) for mask_dict in masks_dicts]
+            cell_masks.append(
+                TileSegmentationData(
+                    level=int(tile_dict["level"]),
+                    x=float(tile_dict["x"]),
+                    y=float(tile_dict["y"]),
+                    width=int(tile_dict["width"]),
+                    height=int(tile_dict["height"]),
+                    masks=masks,
+                )
+            )
+
+        return cls(
+            model_name=raw_json["model_name"],
+            inference_mpp=float(raw_json["inference_mpp"]),
+            cell_masks=cell_masks,
+        )
 
     def save(self, path: Union[str, Path]) -> None:
         """Save the slide segmentation data to a file."""
         with open(path, "w") as f:
-            json.dump(self, f)
+            json.dump(asdict(self), f)
