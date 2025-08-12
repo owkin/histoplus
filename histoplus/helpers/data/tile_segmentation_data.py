@@ -3,7 +3,7 @@
 from __future__ import annotations
 
 from dataclasses import dataclass
-from typing import Union
+from typing import Any, Union
 
 import numpy as np
 
@@ -90,3 +90,51 @@ class TileSegmentationData:
             height=int(metadata["height"]),
             masks=segmentation_polygons,
         )
+
+    @classmethod
+    def from_dict(cls, data: dict[str, Any]) -> TileSegmentationData:
+        """Create a TileSegmentationData object from a dictionary.
+
+        Parameters
+        ----------
+        data : dict[str, Any]
+            Dictionary containing the data to create the object.
+
+        Returns
+        -------
+        TileSegmentationData
+        """
+        masks = [SegmentationPolygon.from_dict(mask) for mask in data["masks"]]
+
+        return cls(
+            level=int(data["level"]),
+            x=int(data["x"]),
+            y=int(data["y"]),
+            width=int(data["width"]),
+            height=int(data["height"]),
+            masks=masks,
+        )
+
+    def to_dict(self) -> dict[str, Any]:
+        """Convert the object to a dictionary.
+
+        Parameters
+        ----------
+        include_masks : bool
+            Include the `masks` key. Be careful this can be slow for large slides.
+
+        Returns
+        -------
+        dict[str, Any]
+        """
+        masks = [mask.to_dict() for mask in self.masks]
+
+        # Object of type int64 is not JSON-serializable, hence the conversion to float
+        return {
+            "level": float(self.level),
+            "x": float(self.x),
+            "y": float(self.y),
+            "width": float(self.width),
+            "height": float(self.height),
+            "masks": masks,
+        }

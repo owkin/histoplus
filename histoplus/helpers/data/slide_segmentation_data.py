@@ -5,7 +5,7 @@ from __future__ import annotations
 import json
 from dataclasses import dataclass
 from pathlib import Path
-from typing import Union
+from typing import Any, Union
 
 import numpy as np
 
@@ -67,4 +67,65 @@ class SlideSegmentationData:
     def save(self, path: Union[str, Path]) -> None:
         """Save the slide segmentation data to a file."""
         with open(path, "w") as f:
-            json.dump(self, f)
+            json.dump(self.to_dict(), f)
+
+    @classmethod
+    def load(cls, path: Union[str, Path]) -> SlideSegmentationData:
+        """Create a SlideSegmentationData object from a JSON file.
+
+        Parameters
+        ----------
+        path : Union[str, Path]
+            Path to the JSON file.
+
+        Returns
+        -------
+        SlideSegmentationData
+        """
+        with open(path, "r") as file:
+            data = json.load(file)
+        return cls.from_dict(data)
+
+    @classmethod
+    def from_dict(cls, data: dict[str, Any]) -> SlideSegmentationData:
+        """Create a SlideSegmentationData object from a dictionary.
+
+        Parameters
+        ----------
+        data : dict[str, Any]
+            Dictionary containing the data to create the object.
+
+        Returns
+        -------
+        SlideSegmentationData
+        """
+        cell_masks = [
+            TileSegmentationData.from_dict(tile) for tile in data["cell_masks"]
+        ]
+        return cls(
+            model_name=data["model_name"],
+            inference_mpp=data["inference_mpp"],
+            cell_masks=cell_masks,
+        )
+
+    def to_dict(self) -> dict[str, Any]:
+        """Convert the object to a dictionary.
+
+        Returns
+        -------
+        dict[str, Any]
+        """
+        return {
+            "model_name": self.model_name,
+            "inference_mpp": self.inference_mpp,
+            "cell_masks": [tile.to_dict() for tile in self.cell_masks],
+        }
+
+    def to_json(self) -> str:
+        """Convert the object to a JSON string.
+
+        Returns
+        -------
+        str
+        """
+        return json.dumps(self.to_dict(), indent=None, separators=(",", ":"))
