@@ -123,3 +123,28 @@ class CellViTSegmentor(Segmentor):
     def get_postprocess_fn(self) -> Callable:
         """Get the postprocessing function."""
         return self.postprocessor.postprocess
+
+    def forward(self, images: torch.Tensor) -> dict[str, torch.Tensor]:
+        """Infers the segmentation masks from the input images.
+
+        Parameters
+        ----------
+        images : torch.Tensor
+            A transformed image.
+
+        Returns
+        -------
+        dict[str, torch.Tensor]
+            Raw prediction maps used during post-processing.
+        """
+        outputs = self.model(images)
+
+        # Only select the nuclei probability channel
+        outputs["np"] = torch.softmax(outputs["np"], dim=1)[:, 1]
+        outputs["tp"] = torch.argmax(outputs["tp"], dim=1, keepdim=False)
+
+        outputs["hv"] = outputs["hv"].to(torch.float16)
+        outputs["np"] = outputs["np"].to(torch.float16)
+        outputs["tp"] = outputs["tp"].to(torch.uint8)
+
+        return outputs

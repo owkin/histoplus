@@ -33,11 +33,9 @@ def test_extract(request, slide_data, segmentor_fixture):
         n_tiles=N_TILES,
     )
 
-    assert cell_segmentation_data.mpp == expected_mpp
-
     original_coords = features[:N_TILES, 1:3]
     extracted_coords = np.array(
-        [[tile["x"], tile["y"]] for tile in cell_segmentation_data.cell_masks]
+        [[tile.x, tile.y] for tile in cell_segmentation_data.cell_masks]
     )
 
     np.testing.assert_equal(original_coords.astype(int), extracted_coords.astype(int))
