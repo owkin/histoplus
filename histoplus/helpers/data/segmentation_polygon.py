@@ -75,10 +75,13 @@ class SegmentationPolygon:
         -------
         dict[str, Any]
         """
+        coordinates_list = np.asarray(self.coordinates).tolist()
+        centroid_list = np.asarray(self.centroid).tolist()
+
         return {
-            "cell_id": self.cell_id,
+            "cell_id": float(self.cell_id),
             "cell_type": self.cell_type,
             "confidence": self.confidence,
-            "coordinates": self.coordinates,
-            "centroid": self.centroid,
+            "coordinates": coordinates_list,
+            "centroid": centroid_list,
         }

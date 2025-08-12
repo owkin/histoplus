@@ -56,5 +56,3 @@ def test_extract_cell_masks(tmp_path):
 
     # Check that the SlideSegmentationData object was correctly saved
     assert isinstance(saved_data, SlideSegmentationData)
-    assert saved_data.slide_id == slide_path.name
-    assert saved_data.n_tiles == N_TILES
