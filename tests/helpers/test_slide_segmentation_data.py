@@ -18,5 +18,3 @@ def test_slide_segmentation_data_roundtrip(tmp_path, dummy_tile):
 
     # Dataclasses are frozen, default equality compares fields recursively
     assert loaded == original
-
-

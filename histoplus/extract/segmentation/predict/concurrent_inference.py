@@ -93,7 +93,7 @@ class ConcurrentModelInference:
         batch_predictions_path = os.path.join(
             predictions_dir, f"batch_{batch_idx:05d}.npz"
         )
-        np.savez_compressed(batch_predictions_path, **outputs)
+        np.savez_compressed(batch_predictions_path, **outputs)  # type: ignore
 
     def run(self, dataloader: DataLoader):
         """Run inference on data loader and concurrently save compressed results.
