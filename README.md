@@ -8,7 +8,7 @@
 [![Documentation](https://img.shields.io/badge/docs-github.com/owkin/histoplus-green.svg)](https://github.com/owkin/histoplus)
 ---
 
-Corresponding pre-print can be found [here](https://arxiv.org/abs/2508.09926).
+Corresponding pre-print paper can be found [here](https://arxiv.org/abs/2508.09926).
 
 
 ## Table of Contents
@@ -180,26 +180,15 @@ results.save("output/results.json")
 
 ## Evaluation & Metrics
 
-### Performance Benchmarks in External Validation
-<TODO replace by graph>
+### Performance in External Validation
+![Comparison Figure](docs/scatter_plot_fig.png)
+*Comparison of CellViT models with different backbones based on detection quality, classification performance
+and model size confirm the superiority of pathology-specific encoders on external set.  The CellViT model with the H0-mini encoder emerges as the best trade-off, combining strong
+detection and classification performance with a compact architecture.*
 
-| Metric | HistoPLUS | Previous SOTA | Improvement |
-|--------|-----------|---------------|-------------|
-| Detection AP@0.5 | **0.847** | 0.768 | +7.9% |
-| Overall F1 Score | **0.532** | 0.511 | +26.4% |
-| Parameters | **146M** | 748M | 5.3x fewer |
-
-### Per-Cell Type Performance
-
-| Cell Type | Precision | Recall | F1-Score | Support |
-|-----------|-----------|--------|----------|---------|
-| Tumor Cell | 0.91 | 0.89 | 0.90 | 45,231 |
-| Lymphocyte | 0.85 | 0.82 | 0.84 | 28,104 |
-| Stromal Cell | 0.78 | 0.76 | 0.77 | 15,698 |
-| Neutrophil | 0.72 | 0.68 | 0.70 | 8,945 |
-| Macrophage | 0.69 | 0.65 | 0.67 | 6,432 |
-| ... | ... | ... | ... | ... |
-
+### Per-Cell-Type Performance
+![Comparison Figure](docs/comparison_metrics.png)
+*HistoTRAIN dataset enables the analysis of 13 cell types and HistoPLUS proposes a SOTA model for detecting and classifying them.*
 
 ## Model Card / Responsible Use
 
