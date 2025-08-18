@@ -9,33 +9,15 @@ from histoplus.helpers.hub.utils import load_weights_from_hub
 from histoplus.helpers.nn.cellvit import CellViT
 
 
-ModuleCallbackType = Union[
-    # For PretrainedModule
-    Callable[[], torch.nn.Module],
-    # For PretrainedSegmentor
-    Callable[[dict[int, str], float, list[int], str, int, int], torch.nn.Module],
+ModuleCallbackType = Callable[
+    [dict[int, str], float, list[int], str, int, int], torch.nn.Module
 ]
 
 
-class PretrainedModule(torch.nn.Module):
-    """PretrainedModule class to hold information on the weights."""
-
-    # Identifier
-    name: str
-    # Path toward the weights of the module on the bucket
-    weights: str
-    # This function returns the torch.nn.Module associated to the Hub weights
-    module_fn: ModuleCallbackType
-
-    def __new__(cls):
-        """Create a new instance of the module with the pretrained weights loaded."""
-        module = cls.module_fn()
-        module.load_state_dict(load_weights_from_hub(cls.weights, map_location="cpu"))
-        module.eval()
-        return module
+HF_REPO_ID = "owkin/histoplus"
 
 
-class PretrainedSegmentor(PretrainedModule):
+class PretrainedSegmentor(torch.nn.Module):
     """PretrainedSegmentor class to hold information on the weights."""
 
     # This function returns the torch.nn.Module associated to the Hub weights
@@ -46,8 +28,6 @@ class PretrainedSegmentor(PretrainedModule):
     mpp: float
     # The layer indices used to extract the intermediate feature maps fed to the decoder
     output_layers: list[int]
-    # Pretrained backbone weights used during training
-    backbone_weights_pretraining: str
     # The image size used during training
     train_image_size: int
     # Mean for normalizing the input
@@ -61,11 +41,12 @@ class PretrainedSegmentor(PretrainedModule):
             cls.class_mapping,
             cls.mpp,
             cls.output_layers,
-            cls.backbone_weights_pretraining,
             cls.train_image_size,
             inference_image_size,
         )
-        module.load_state_dict(load_weights_from_hub(cls.weights, map_location="cpu"))
+        module.load_state_dict(
+            load_weights_from_hub(HF_REPO_ID, cls.filename, map_location="cpu")
+        )
         module.eval()
         return module
 
@@ -77,11 +58,10 @@ class histoplus_cellvit_segmentor_40x(PretrainedSegmentor):
     """
 
     name = "histoplus_cellvit_segmentor_40x"
-    weights = "/home/sagemaker-user/.histowmics/weights/HIPE_models/CellViT/hipe_cellvit_segmentor_v7_40x.pt"
+    weights = "histoplus_cellvit_segmentor_40x.pt"
     mpp = 0.25
 
     output_layers = [3, 5, 7, 11]
-    backbone_weights_pretraining = "aquavit_105k"
 
     mean = BIOPTIMUS_MEAN
     std = BIOPTIMUS_STD
@@ -98,7 +78,6 @@ class histoplus_cellvit_segmentor_40x(PretrainedSegmentor):
             cell_type_mapping=cell_type_mapping,
             mpp=mpp,
             output_layers=out_layers,
-            backbone_weights_pretraining=weights,
             number_tissue_types=None,
             train_image_size=train_image_size,
             inference_image_size=inference_image_size,
@@ -130,12 +109,11 @@ class histoplus_cellvit_segmentor_20x(PretrainedSegmentor):
     Trained on: LUAD, LUSC, MESO, BLCA, COAD, PAAD, OV, BRCA.
     """
 
-    name = "hipe_cellvit_segmentor_20x"
-    weights = "/home/sagemaker-user/.histowmics/weights/HIPE_models/CellViT/hipe_cellvit_segmentor_v7_20x.pt"
+    name = "histoplus_cellvit_segmentor_20x"
+    weights = "histoplus_cellvit_segmentor_20x.pt"
     mpp = 0.5
 
     output_layers = [3, 5, 7, 11]
-    backbone_weights_pretraining = "aquavit_105k"
 
     mean = BIOPTIMUS_MEAN
     std = BIOPTIMUS_STD
@@ -152,7 +130,6 @@ class histoplus_cellvit_segmentor_20x(PretrainedSegmentor):
             cell_type_mapping=cell_type_mapping,
             mpp=mpp,
             output_layers=out_layers,
-            backbone_weights_pretraining=weights,
             number_tissue_types=None,
             train_image_size=train_image_size,
             inference_image_size=inference_image_size,

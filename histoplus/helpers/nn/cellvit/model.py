@@ -117,9 +117,9 @@ class CellViT(CellViTBase):
         cell_type_mapping: dict[int, str],
         mpp: float,
         output_layers: list[int],
-        backbone_weights_pretraining: PretrainedBackboneWeight,
         train_image_size: int,
         inference_image_size: int,
+        backbone_weights_pretraining: PretrainedBackboneWeight = "aquavit_105k",
         number_tissue_types: Optional[int] = None,
     ):
         super().__init__(
