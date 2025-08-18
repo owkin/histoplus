@@ -10,9 +10,9 @@ CC-BY-NC-ND-4.0
 [https://creativecommons.org/licenses/by-nc-nd/4.0/legalcode](https://creativecommons.org/licenses/by-nc-nd/4.0/legalcode)
 
 ## Text
-Text in *italicized blue* is omittable (see Matching Guidelines B.3.5). License or exception text will match to the text for the specified identifier if it either includes or excludes this omittable text.  
+Text in *italicized blue* is omittable (see Matching Guidelines B.3.5). License or exception text will match to the text for the specified identifier if it either includes or excludes this omittable text.
 
-Text in **red** is replaceable (see Matching Guidelines B.3.4). License or exception text will match to the text for the specified identifier if it includes a permitted variant of this replaceable text. The permitted variants can be found in the corresponding regular expression as shown in title text visible by hovering over the red text.  
+Text in **red** is replaceable (see Matching Guidelines B.3.4). License or exception text will match to the text for the specified identifier if it includes a permitted variant of this replaceable text. The permitted variants can be found in the corresponding regular expression as shown in title text visible by hovering over the red text.
 
 ### Creative Commons Attribution-NonCommercial-NoDerivatives 4.0 International
 Creative Commons Corporation ("Creative Commons") is not a law firm and does not provide legal services or legal advice. Distribution of Creative Commons public licenses does not create a lawyer-client or other relationship. Creative Commons makes its licenses and related information available on an "as-is" basis. Creative Commons gives no warranties regarding its licenses, any material licensed under their terms and conditions, or any related information. Creative Commons disclaims all liability for damages resulting from their use to the fullest extent possible.
@@ -49,7 +49,7 @@ By exercising the Licensed Rights (defined below), You accept and agree to be bo
 
 ## Section 1: Definitions
 
-- **Adapted Material**: Material subject to Copyright and Similar Rights that is derived from or based upon the Licensed Material and in which the Licensed Material is translated, altered, arranged, transformed, or otherwise modified in a manner requiring permission under the Copyright and Similar Rights held by the Licensor.  
+- **Adapted Material**: Material subject to Copyright and Similar Rights that is derived from or based upon the Licensed Material and in which the Licensed Material is translated, altered, arranged, transformed, or otherwise modified in a manner requiring permission under the Copyright and Similar Rights held by the Licensor.
   *For musical works, performance, or sound recordings, Adapted Material is always produced when synched with a moving image.*
 
 - **Copyright and Similar Rights**: Copyright and/or similar rights closely related to copyright including, without limitation, performance, broadcast, sound recording, and Sui Generis Database Rights. The rights in Section 2(b)(1)-(2) are excluded.
@@ -157,6 +157,6 @@ By exercising the Licensed Rights (defined below), You accept and agree to be bo
 ---
 
 ### Additional Notes
-Creative Commons is not a party to its public licenses but may be considered the "Licensor" in some cases. Use of the "Creative Commons" trademark requires written consent.  
+Creative Commons is not a party to its public licenses but may be considered the "Licensor" in some cases. Use of the "Creative Commons" trademark requires written consent.
 
 Contact: [creativecommons.org](https://creativecommons.org)

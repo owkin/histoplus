@@ -271,6 +271,7 @@ name = "histoplus"
 version = "0.0.1"
 source = { editable = "." }
 dependencies = [
+    { name = "huggingface-hub" },
     { name = "joblib" },
     { name = "loguru" },
     { name = "numpy" },
@@ -315,6 +316,7 @@ testing = [
 [package.metadata]
 requires-dist = [
     { name = "coverage", marker = "extra == 'testing'" },
+    { name = "huggingface-hub", specifier = ">=0.33.4" },
     { name = "ipdb", marker = "extra == 'dev'", specifier = ">=0.13.13" },
     { name = "joblib", specifier = ">=1.4.2" },
     { name = "loguru", specifier = ">=0.7.2" },

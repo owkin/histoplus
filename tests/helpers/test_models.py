@@ -7,10 +7,8 @@ from histoplus.helpers.nn.cellvit import CellViT
 
 
 NUMBER_CELL_TYPES = 15
-NUMBER_TISSUE_TYPES = 8
 OUT_LAYERS = [3, 5, 7, 11]
 dummy_mapping = {i: str(i) for i in range(NUMBER_CELL_TYPES)}
-dummy_tissue_mapping = {i: str(i) for i in range(NUMBER_TISSUE_TYPES)}
 
 
 @pytest.fixture(
