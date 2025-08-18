@@ -37,7 +37,7 @@ HistoPLUS addresses critical challenges in analyzing tumor microenvironments (TM
 - Cross-institutional and cross-indication performance remains limited
 
 **Our approach:**
-HistoPLUS introduces a CellViT architecture trained on a carefully curated pan-cancer dataset of 108,722 nuclei spanning 13 distinct cell types. The model achieves state-of-the-art performance while using significantly fewer parameters, enabling robust analysis of both common and understudied cell populations.
+HistoPLUS introduces a CellViT architecture incorporating a state-of-the-art specialized foundation model and trained on a novel and carefully curated pan-cancer dataset of 108,722 nuclei spanning 13 distinct cell types. The model achieves state-of-the-art performance while using significantly fewer parameters, enabling robust analysis of both common and understudied cell populations.
 
 
 ## Key Features
@@ -188,7 +188,9 @@ detection and classification performance with a compact architecture.*
 
 ### Per-Cell-Type Performance
 ![Comparison Figure](docs/comparison_metrics.png)
-*HistoTRAIN dataset enables the analysis of 13 cell types and HistoPLUS proposes a SOTA model for detecting and classifying them.*
+*HistoTRAIN dataset enables the analysis of 13 cell types and HistoPLUS proposes a SOTA model for detecting and classifying them. Performances are computed via bootstrapping with 1,000 iterations. Statistical
+significance is indicated as follows: * P < 0.05, ** P < 1e-3; non-significant differences are labeled "n.s.". Double-sided p-values
+were computed using bootstrap resampling.*
 
 ## Model Card / Responsible Use
 
@@ -249,7 +251,7 @@ histoplus/
 │       ├── data/                  # Data structures
 │       └── serializers/           # Output formatting
 ├── tests/                         # Test suite
-├── docs/                          # Documentation
+├── docs/                          # Documentation and figures
 ├── pyproject.toml                 # Project configuration
 ├── README.md                      # This file
 └── LICENSE                        # License information
