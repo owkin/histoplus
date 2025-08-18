@@ -31,14 +31,8 @@ def extract(
 ) -> SlideSegmentationData:
     """Extract cell segmentation masks from a whole slide image.
 
-    This function applies a cell segmentation and classification model to a whole
-    slide image (or random subset of tiles) and outputs an object with the
-    segmentation masks and cell classes.
-
-    It also classifies ALL tissue tiles using a tile classification model.
-
-    Note that it assumes that the slide has already been preprocessed and its features
-    extracted using Owkin's `TilingTool`.
+    This function applies a cell segmentation model to a whole slide image
+    and outputs an object with the segmentation masks and cell classes.
 
     Parameters
     ----------
