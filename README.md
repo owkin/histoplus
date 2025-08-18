@@ -132,10 +132,10 @@ histoplus extract \
 
 ```python
 from histoplus.extract import extract
-from histoplus.helpers.segmentor import MaskDINOSegmentor
+from histoplus.helpers.segmentor import CellViTSegmentor
 
 # Instantiate segmentor
-segmentor = MaskDINOSegmentor.default()
+segmentor = CellViTSegmentor.default()
 
 # Process a whole slide image
 results = extract(
