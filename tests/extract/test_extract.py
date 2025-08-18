@@ -1,6 +1,5 @@
 """Unit tests for the extract module."""
 
-import numpy as np
 import pytest
 
 from histoplus.extract import extract
