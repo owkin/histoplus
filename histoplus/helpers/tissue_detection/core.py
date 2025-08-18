@@ -29,7 +29,7 @@ def detect_tissue_on_wsi(
     tile_size_at_base_mpp: int = 224,
     default_mpp_max: float = 0.23,
     mpp_rtol: float = 0.2,
-) -> np.ndarray:
+) -> tuple[np.ndarray, int]:
     """Detect tissue on WSI using Otsu's thresholding."""
     downsample_factor = target_mpp / base_mpp
     tile_size_at_target_mpp = int(tile_size_at_base_mpp / downsample_factor)
@@ -40,6 +40,14 @@ def detect_tissue_on_wsi(
         slide,
         deepzoom,
         mpp=target_mpp,
+        default_mpp_max=default_mpp_max,
+        mpp_rtol=mpp_rtol,
+    )
+
+    dz_level_at_base_mpp = get_tiling_slide_level(
+        slide,
+        deepzoom,
+        mpp=base_mpp,
         default_mpp_max=default_mpp_max,
         mpp_rtol=mpp_rtol,
     )
@@ -71,4 +79,4 @@ def detect_tissue_on_wsi(
 
     logger.info(f"Found {len(tissue_coords)} tiles with Otsu's threshold.")
 
-    return tissue_coords
+    return tissue_coords, dz_level_at_base_mpp

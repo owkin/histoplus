@@ -18,7 +18,8 @@ from histoplus.helpers.segmentor import Segmentor
 
 def extract(
     slide: OpenSlide,
-    features: np.ndarray,
+    coords: np.ndarray,
+    deepzoom_level: int,
     segmentor: Segmentor,
     tile_size: int = 224,
     n_tiles: Optional[int] = None,
@@ -44,11 +45,12 @@ def extract(
     slide : OpenSlide
         The whole slide image to process.
 
-    features : np.ndarray
-        Feature matrix of shape (n_tiles, embedding_dim). By default, the tumor detector
-        uses features extracted with a WideResNet50 model trained with MoCo on TCGA-COAD.
-        Therefore, the feature dimension is 2048. If you are using a different feature
-        extractor, make sure to specify your own tumor detector model.
+    coords : np.ndarray
+        Tile coordinates matrix of shape (n_tiles, 2). These coordinates are given to
+        the DeepZoomGenerator.
+
+    deepzoom_level : int
+        The DeepZoom level used for the extraction.
 
     segmentor: torch.nn.Module, optional
         The cell segmentation and classification model to use. If not provided, the
@@ -82,14 +84,13 @@ def extract(
     SlideSegmentationData
         The segmentation masks and cell classes.
     """
-    original_coords = features[:n_tiles, 1:3]
-    original_dz_level = int(features[0, 0])
+    original_coords = coords[:n_tiles, :]
 
     coarse_coords, deepzoom, extraction_dz_level = (
         get_tile_coordinates_and_deepzoom_for_segmentor(
             slide,
             original_coords,
-            original_dz_level,
+            deepzoom_level,
             segmentor,
             original_tile_size=tile_size,
             inference_tile_overlap=inference_tile_overlap,
@@ -101,7 +102,7 @@ def extract(
         tile_predictions = extract_cell_segmentation_masks(
             slide=slide,
             deepzoom=deepzoom,
-            original_dz_level=original_dz_level,
+            original_dz_level=deepzoom_level,
             extraction_dz_level=extraction_dz_level,
             original_coords=original_coords,
             coarse_coords=coarse_coords,
@@ -118,7 +119,7 @@ def extract(
         slide_data = SlideSegmentationData.from_predictions(
             model_name=segmentor.segmentor_name,
             inference_mpp=segmentor.target_mpp,
-            deepzoom_level=original_dz_level,
+            deepzoom_level=deepzoom_level,
             tile_size=tile_size,
             tile_coordinates=original_coords,
             tile_predictions=tile_predictions,

@@ -4,7 +4,6 @@ import time
 from pathlib import Path
 from typing import List, Optional
 
-import numpy as np
 import openslide
 import typer
 from loguru import logger
@@ -12,13 +11,14 @@ from openslide import OpenSlideError
 from PIL import Image
 
 from histoplus.cli.utils import (
-    collect_slides_to_extract,
+    collect_paths,
     dump_config,
     get_optimal_segmentor_for_slide,
 )
 from histoplus.extract import extract
 from histoplus.helpers.constants import OutputFileType
 from histoplus.helpers.exceptions import MPPNotAvailableError
+from histoplus.helpers.tissue_detection import detect_tissue_on_wsi
 
 
 Image.MAX_IMAGE_PIXELS = None
@@ -26,7 +26,6 @@ Image.MAX_IMAGE_PIXELS = None
 
 def _launch_extraction(
     slide_path: Path,
-    features_path: Path,
     export_dir: Path,
     tile_size: int,
     n_tiles: Optional[int],
@@ -44,14 +43,15 @@ def _launch_extraction(
 
         segmentor = get_optimal_segmentor_for_slide(slide, verbose)
 
-        slide_export_dir.mkdir(exist_ok=True, parents=True)
+        coords, dz_level = detect_tissue_on_wsi(slide)
 
-        features_arr = np.load(features_path)
+        slide_export_dir.mkdir(exist_ok=True, parents=True)
 
         try:
             cell_segmentation_data = extract(
                 slide=slide,
-                features=features_arr,
+                coords=coords,
+                deepzoom_level=dz_level,
                 segmentor=segmentor,
                 tile_size=tile_size,
                 n_tiles=n_tiles,
@@ -82,7 +82,6 @@ def _launch_extraction(
 def extract_command(
     ctx: typer.Context,
     slides: List[str],
-    features: List[str],
     export_dir: Path,
     tile_size: int,
     n_tiles: Optional[int],
@@ -95,13 +94,9 @@ def extract_command(
 
     logger.add(export_dir / "{time}.log")
 
-    slide_paths, features_paths = collect_slides_to_extract(
-        slides, features, export_dir
-    )
+    slide_paths = collect_paths(slides)
 
-    for slide_idx, (slide_path, features_path) in enumerate(
-        zip(slide_paths, features_paths, strict=False)
-    ):
+    for slide_idx, slide_path in enumerate(slide_paths):
         logger.info(
             f"{slide_idx + 1}/{len(slide_paths)} --- Starting processing of {slide_path.name}"
         )
@@ -110,7 +105,6 @@ def extract_command(
 
         _launch_extraction(
             slide_path=slide_path,
-            features_path=features_path,
             export_dir=export_dir,
             n_tiles=n_tiles,
             tile_size=tile_size,

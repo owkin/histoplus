@@ -27,12 +27,6 @@ def extract_wrapper(
         "or relative (like ../../slides/*/*.svs), "
         "and can contain shell-style wildcards. Compatible with s3 path.",
     ),
-    features: List[str] = typer.Option(
-        None,
-        "--features",
-        help="Path(s) to features. Parent directory should match slides names. "
-        "Can contain shell-style wildcards. Compatible with s3 path.",
-    ),
     export_dir: Path = typer.Option(
         None,
         "--export_dir",
@@ -72,7 +66,6 @@ def extract_wrapper(
     return extract_command(
         ctx=ctx,
         slides=slides,
-        features=features,
         export_dir=export_dir,
         tile_size=tile_size,
         n_tiles=n_tiles,
