@@ -11,7 +11,7 @@ from loguru import logger
 from openslide import OpenSlide
 from openslide.deepzoom import DeepZoomGenerator
 
-from histoplus.helpers.constants import INFERENCE_TILE_SIZE, OutputFileType
+from histoplus.helpers.constants import INFERENCE_TILE_SIZE
 from histoplus.helpers.exceptions import MPPNotAvailableError
 from histoplus.helpers.segmentor import CellViTSegmentor, Segmentor
 from histoplus.helpers.tiling.optimal_mpp import get_tiling_slide_level
@@ -96,104 +96,6 @@ def collect_paths(paths: list[str]) -> list[Path]:
         else:
             result += sorted(glob.glob(str(path)))
     return [Path(p) for p in result]
-
-
-def get_aligned_slide_and_features_paths(
-    slide_paths: list[Path], features_paths: list[Path]
-) -> tuple[list[Path], list[Path]]:
-    """Get the slide and features paths and align them.
-
-    The slide paths and features paths are expected to follow one of the following pattern:
-
-    Pattern 1:
-        - slide: /path/to/slide1.svs
-        - features: /path/to/slide1.svs/features.npy
-
-    Pattern 2:
-        - slide: /path/to/slide1.svs
-        - features: /path/to/features/slide1.svs.npy
-
-    Parameters
-    ----------
-    slides_paths : list[Path]
-        The slides paths.
-    features_paths : list[Path]
-        The features paths.
-
-    Returns
-    -------
-    slides_paths : list[Path]
-        The slides paths.
-    features_paths : list[Path]
-        The features paths.
-    """
-    aligned_slides = []
-    aligned_features = []
-
-    for slide_path in slide_paths:
-        slide_name = slide_path.stem
-        matching_feature = next(
-            (f for f in features_paths if slide_name in str(f)), None
-        ) or next((f for f in features_paths if slide_name in Path(f).stem), None)
-
-        if matching_feature:
-            aligned_slides.append(slide_path)
-            aligned_features.append(matching_feature)
-        else:
-            logger.warning(f"No matching feature found for slide: {slide_path}")
-
-    return aligned_slides, aligned_features
-
-
-def collect_slides_to_extract(
-    slides: list[str], features: list[str], export_dir: Path
-) -> tuple[list[Path], list[Path]]:
-    """Collect slides and features to extract.
-
-    Parameters
-    ----------
-    slides: list[str]
-        Paths to the slides.
-
-    features: list[str]
-        Paths to the features.
-
-    export_dir : Path
-        Export directory.
-
-    Returns
-    -------
-    tuple[list[Path], list[Path]]
-        Aligned slide and features paths.
-    """
-    slide_paths = collect_paths(slides)
-    features_paths = collect_paths(features)
-
-    # Filter out slides that have already been processed
-    mask_exist = [
-        (export_dir / p.name / OutputFileType.JSON_CELL_MASKS.value).is_file()
-        for p in slide_paths
-    ]
-
-    if all(mask_exist):
-        raise ValueError("All slides have already been processed")
-
-    slide_paths = [
-        p for p, exists in zip(slide_paths, mask_exist, strict=True) if not exists
-    ]
-    logger.info(f"Found {len(slide_paths)} slides left to tile")
-
-    # Collect slides and features paths and align them
-    slide_paths, features_paths = get_aligned_slide_and_features_paths(
-        slide_paths, features_paths
-    )
-
-    if not slide_paths or not features_paths:
-        raise ValueError(
-            f"No slides or features found using the requested path : {slides}"
-        )
-
-    return slide_paths, features_paths
 
 
 def _get_best_available_mpp(slide: OpenSlide, verbose: int) -> float:

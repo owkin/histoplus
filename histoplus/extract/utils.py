@@ -34,7 +34,7 @@ def get_tile_coordinates_and_deepzoom_for_segmentor(
         Tile coordinates from the TilingTool.
 
     original_deepzoom_level : int
-        DeepZoom level of the features provided by the user. Most likely the level at
+        DeepZoom level of the featurs provided by the user. Most likely the level at
         MPP 0.5, used by the TilingTool.
 
     segmentor : Segmentor
