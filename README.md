@@ -20,8 +20,6 @@ Corresponding pre-print paper can be found [here](https://arxiv.org/abs/2508.099
 - [Quick Start](#quick-start--example-usage)
 - [Evaluation & Metrics](#evaluation--metrics)
 - [Model Card](#model-card--responsible-use)
-- [Repository Structure](#repository-structure)
-- [Documentation & Tutorials](#documentation--tutorials)
 - [Citing This Work](#citing-this-work)
 - [Contributing](#contributing)
 - [License & Authorship](#license--authorship)
@@ -115,36 +113,40 @@ histoplus --help
 ### Command Line Interface
 
 ```bash
-# Basic nuclei detection and classification
-histoplus extract \
-  --slides /path/to/slide.svs \
-  --export_dir /path/to/results/
-
-# With custom parameters
-histoplus extract \
-  --slides /path/to/slide.svs \
-  --export_dir /path/to/results/ \
-  --batch-size 16 \
-  --n_workers 8
+histoplus \
+    --slides ./TCGA-G2-A2EC-01Z-00-DX4.8E4382A4-71F9-4BC3-89AA-09B4F1B54985.svs \
+    --export_dir ./ \
+    --batch_size 32
 ```
 
 ### Python API
 
 ```python
+import openslide
 from histoplus.extract import extract
 from histoplus.helpers.segmentor import CellViTSegmentor
+from histoplus.helpers.tissue_detection import detect_tissue_on_wsi
 
-# Instantiate segmentor
-segmentor = CellViTSegmentor.default()
+MPP = 0.25  # If available, otherwise set to 0.5
+INFERENCE_IMAGE_SIZE = 784
+
+slide = openslide.open_slide("./TCGA-G2-A2EC-01Z-00-DX4.8E4382A4-71F9-4BC3-89AA-09B4F1B54985.svs")
+
+tissue_coords, dz_level = detect_tissue_on_wsi(slide)
+
+segmentor = CellViTSegmentor.from_histoplus(
+    mpp=MPP,
+    mixed_precision=True,
+    inference_image_size=INFERENCE_IMAGE_SIZE,
+)
 
 # Process a whole slide image
 results = extract(
     slide=slide,
+    coords=tissue_coords,
+    deepzoom_level=dz_level,
     segmentor=segmentor,
-    tile_size=224,
-    n_workers=8,
-    batch_size=16,
-    verbose=1,
+    batch_size=32,
 )
 
 # Save results
@@ -223,40 +225,6 @@ were computed using bootstrap resampling.*
 - **Privacy**: Ensure compliance with data protection regulations
 - **Transparency**: Model predictions include confidence scores for interpretation
 
-## Repository Structure
-
-```
-histoplus/
-├── histoplus/                     # Main package
-│   ├── cli/                       # Command-line interface
-│   │   ├── app.py                 # Main CLI application
-│   │   ├── extract.py             # Extraction commands
-│   │   └── utils.py               # CLI utilities
-│   ├── extract/                   # Core extraction functionality
-│   │   ├── core.py                # Main extraction logic
-│   │   ├── segmentation/          # Segmentation modules
-│   │   │   ├── core.py            # Segmentation algorithms
-│   │   │   ├── predict/           # Inference pipeline
-│   │   │   ├── dataloader.py      # Data loading utilities
-│   │   │   └── postprocess.py     # Post-processing
-│   │   └── utils.py               # Extraction utilities
-│   └── helpers/                   # Utility modules
-│       ├── nn/                    # Neural network components
-│       │   ├── maskdino/          # MaskDINO implementation
-│       │   ├── extractor/         # Feature extractors
-│       │   └── vit.py             # Vision transformer components
-│       ├── segmentor/             # Segmentation models
-│       ├── tiling/                # Slide tiling utilities
-│       ├── border_effects/        # Edge case handling
-│       ├── data/                  # Data structures
-│       └── serializers/           # Output formatting
-├── tests/                         # Test suite
-├── docs/                          # Documentation and figures
-├── pyproject.toml                 # Project configuration
-├── README.md                      # This file
-└── LICENSE                        # License information
-```
-
 ## Citing This Work
 
 If you use HistoPLUS in your research, please cite our work:
@@ -321,7 +289,7 @@ This project is licensed under the CC BY-NC-ND 4.0 License. See the [LICENSE](ht
 ---
 <br>
 
-**🔬 Advancing computational pathology through robust, accessible AI tools.**  
+**🔬 Advancing computational pathology through robust, accessible AI tools.**
 For questions, support, or collaboration opportunities, please reach out via [GitHub Issues](https://github.com/owkin/histoplus/issues).
 
 ## Acknowledgements
@@ -333,7 +301,6 @@ MOSAIC consortium (Owkin; Charité – Universitätsmedizin Berlin (DE); Lausann
 Hospital - CHUV (CH); Universitätsklinikum Erlangen (DE); Institut Gustave Roussy (FR);
 University of Pittsburgh (USA)).
 
-This authors thank Dr Kathrina Alexander, Dr Audrey Caudron, Dr Richard Doughty, 
-Dr Romain Dubois, Dr Thibaut Gioanni, Dr Camelia Radulescu, Dr Thomas Rialland, 
+This authors thank Dr Kathrina Alexander, Dr Audrey Caudron, Dr Richard Doughty,
+Dr Romain Dubois, Dr Thibaut Gioanni, Dr Camelia Radulescu, Dr Thomas Rialland,
 Dr Pierre Romero and Dr Yannis Roxanis for their contributions to HistoTRAIN and HistoVAL.
-
