@@ -1,13 +1,15 @@
 # HistoPLUS
 
-## Pan-tumor nuclei detection, segmentation and classification on H&E slides
+## Towards Comprehensive Cellular Characterisation of H&E slides
 
-[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+[![License](https://img.shields.io/badge/License-CC%20BY--NC--ND%204.0-lightgrey.svg)](https://creativecommons.org/licenses/by-nc-nd/4.0/deed.en)
 [![Python 3.10+](https://img.shields.io/badge/python-3.10+-blue.svg)](https://www.python.org/downloads/)
 [![PyTorch](https://img.shields.io/badge/PyTorch-2.4+-orange.svg)](https://pytorch.org/)
 [![Documentation](https://img.shields.io/badge/docs-github.com/owkin/histoplus-green.svg)](https://github.com/owkin/histoplus)
-
 ---
+
+Corresponding pre-print paper can be found [here](https://arxiv.org/abs/2508.09926).
+
 
 ## Table of Contents
 
@@ -16,16 +18,14 @@
 - [Technology Stack](#technology-stack--model-details)
 - [Installation](#installation)
 - [Quick Start](#quick-start--example-usage)
-- [Configuration and Training](#configuration-and-training)
 - [Evaluation & Metrics](#evaluation--metrics)
 - [Model Card](#model-card--responsible-use)
 - [Repository Structure](#repository-structure)
 - [Documentation & Tutorials](#documentation--tutorials)
 - [Citing This Work](#citing-this-work)
 - [Contributing](#contributing)
-- [Changelog](#changelog--release-notes)
 - [License & Authorship](#license--authorship)
-- [Acknowledgements](#acknowledgements--funding)
+- [Acknowledgements](#acknowledgements)
 
 ## Overview
 
@@ -37,24 +37,19 @@ HistoPLUS addresses critical challenges in analyzing tumor microenvironments (TM
 - Cross-institutional and cross-indication performance remains limited
 
 **Our approach:**
-HistoPLUS introduces a transformer-based architecture trained on a carefully curated pan-cancer dataset of 108,722 nuclei spanning 13 distinct cell types. The model achieves state-of-the-art performance while using significantly fewer parameters, enabling robust analysis of both common and understudied cell populations.
+HistoPLUS introduces a CellViT architecture incorporating a state-of-the-art specialized foundation model and trained on a novel and carefully curated pan-cancer dataset of 108,722 nuclei spanning 13 distinct cell types. The model achieves state-of-the-art performance while using significantly fewer parameters, enabling robust analysis of both common and understudied cell populations.
 
-**Key contributions:**
-- **Superior performance**: 7.9% improvement in detection quality and 26.4% improvement in overall F1 classification score
-- **Efficiency**: 5.3x fewer parameters than competing methods
-- **Broad applicability**: Enables study of 7 previously understudied cell types
-- **Generalization**: Robust transfer to unseen oncology indications
 
 ## Key Features
 
-- 🧠 **Transformer architecture**: State-of-the-art deep learning for cell analysis
-- 🎯 **High precision**: Superior performance on rare and common cell types
-- 📊 **13 cell types**: Comprehensive coverage including understudied populations
-- 🌐 **Cross-domain robustness**: Validated across 4 independent cohorts
-- ⚡ **Efficient inference**: 5.3x fewer parameters than competing methods
+- 🎯 **Unprecedented performances**: Demonstrates 5.2% improvement in detection quality and 23.7% improvement in overall F1 classification score
+- 📊 **13 cell types**: Improves cell type coverage by enabling the study of 7 previously understudied populations
+- 🧠 **State-of-the-art Foundation Models**: Integrates the latest specialized Pathology Foundation Models
+- 🌐 **Cross-domain robustness**: Validated across 6 independent cohorts, including 2 unseen oncology indications
+- ⚡ **Efficient inference**: 5x fewer parameters than competing methods
 - 🔧 **Easy deployment**: Simple CLI and Python API
-- 📁 **Multiple formats**: Support for various whole slide image formats
-- **Adaptable to available magnification**: Support 20x and 40x magnification
+- 📁 **Multiple formats**: Supports various whole slide image formats
+- 🔬 **Adaptable to multiple magnification**: Supports 20x and 40x magnification
 
 ## Technology Stack & Model Details
 
@@ -95,7 +90,7 @@ brew install openslide
 pip install histoplus
 ```
 
-### Install from Source
+### Install from Source (Alternative)
 
 ```bash
 # Clone the repository
@@ -137,10 +132,10 @@ histoplus extract \
 
 ```python
 from histoplus.extract import extract
-from histoplus.helpers.segmentor import MaskDINOSegmentor
+from histoplus.helpers.segmentor import CellViTSegmentor
 
 # Instantiate segmentor
-segmentor = MaskDINOSegmentor.default()
+segmentor = CellViTSegmentor.default()
 
 # Process a whole slide image
 results = extract(
@@ -185,41 +180,27 @@ results.save("output/results.json")
 
 ## Evaluation & Metrics
 
-### Performance Benchmarks
+### Performance in External Validation
+![Comparison Figure](docs/scatter_plot_fig.png)
+*Comparison of CellViT models with different backbones based on detection quality, classification performance
+and model size confirm the superiority of pathology-specific encoders on external set.  The CellViT model with the H0-mini encoder emerges as the best trade-off, combining strong
+detection and classification performance with a compact architecture.*
 
-| Metric | HistoPLUS | Previous SOTA | Improvement |
-|--------|-----------|---------------|-------------|
-| Detection AP@0.5 | **0.847** | 0.768 | +7.9% |
-| Overall F1 Score | **0.742** | 0.478 | +26.4% |
-| Parameters | **89M** | 471M | 5.3x fewer |
-
-### Per-Cell Type Performance
-
-| Cell Type | Precision | Recall | F1-Score | Support |
-|-----------|-----------|--------|----------|---------|
-| Tumor Cell | 0.91 | 0.89 | 0.90 | 45,231 |
-| Lymphocyte | 0.85 | 0.82 | 0.84 | 28,104 |
-| Stromal Cell | 0.78 | 0.76 | 0.77 | 15,698 |
-| Neutrophil | 0.72 | 0.68 | 0.70 | 8,945 |
-| Macrophage | 0.69 | 0.65 | 0.67 | 6,432 |
-| ... | ... | ... | ... | ... |
-
-### Cross-Institution Validation
-
-- **4 independent cohorts** from different institutions
-- **Consistent performance** across different scanners and protocols
-- **Robust to staining variations** and image quality differences
+### Per-Cell-Type Performance
+![Comparison Figure](docs/comparison_metrics.png)
+*HistoTRAIN dataset enables the analysis of 13 cell types and HistoPLUS proposes a SOTA model for detecting and classifying them. Performances are computed via bootstrapping with 1,000 iterations. Statistical
+significance is indicated as follows: * P < 0.05, ** P < 1e-3; non-significant differences are labeled "n.s.". Double-sided p-values
+were computed using bootstrap resampling.*
 
 ## Model Card / Responsible Use
 
-### Intended Use
+### Primary Use Cases
 
-**Primary Use Cases:**
 - Research applications in tumor microenvironment analysis
 - Cell population quantification in H&E stained slides
 - Biomarker discovery and validation studies
 
-**Intended Users:**
+### Intended Users
 - Computational pathologists and researchers
 - Bioinformatics professionals
 - Clinical researchers (with appropriate validation)
@@ -270,7 +251,7 @@ histoplus/
 │       ├── data/                  # Data structures
 │       └── serializers/           # Output formatting
 ├── tests/                         # Test suite
-├── docs/                          # Documentation
+├── docs/                          # Documentation and figures
 ├── pyproject.toml                 # Project configuration
 ├── README.md                      # This file
 └── LICENSE                        # License information
@@ -281,10 +262,15 @@ histoplus/
 If you use HistoPLUS in your research, please cite our work:
 
 ```bibtex
-@article{histoplus2024,
-  title={Pan-Cancer Nuclei Detection Model with Clinically Relevant Granularity in H&E-Stained Images},
-  author={B. Adjadj, P.-A. Bannier, G. Horent, S. Mandela, A. Lyon, K. Schutte, U. Marteau, V. Gaury, L. Dumont, T. Mathieu, R. Belbahri, B. Schmauch, E. Durand, K. Von Loga, L. Gillet},
-  year={2024},
+@misc{histoplus2025,
+  title        = {Towards Comprehensive Cellular Characterisation of H\&E Slides},
+  author       = {B. Adjadj, P.-A. Bannier, G. Horent, S. Mandela, A. Lyon, K. Schutte, U. Marteau, V. Gaury, L. Dumont, T. Mathieu, R. Belbahri, B. Schmauch, E. Durand, K. Von Loga, L. Gillet},
+  year         = {2025},
+  eprint       = {2508.09926},
+  archivePrefix= {arXiv},
+  primaryClass = {cs.CV},
+  doi          = {10.48550/arXiv.2508.09926},
+  url          = {https://arxiv.org/abs/2508.09926}
 }
 ```
 
@@ -330,10 +316,24 @@ mypy histoplus/
 
 ### License
 
-This project is licensed under the MIT License. See the [LICENSE](LICENSE) file for details.
+This project is licensed under the CC BY-NC-ND 4.0 License. See the [LICENSE](https://github.com/owkin/histoplus/docs/LICENSE.md) file for details.
 
 ---
+<br>
 
-**🔬 Advancing computational pathology through robust, accessible AI tools.**
-
+**🔬 Advancing computational pathology through robust, accessible AI tools.**  
 For questions, support, or collaboration opportunities, please reach out via [GitHub Issues](https://github.com/owkin/histoplus/issues).
+
+## Acknowledgements
+
+The present study was funded by Owkin.
+
+This study makes use of data generated by the
+MOSAIC consortium (Owkin; Charité – Universitätsmedizin Berlin (DE); Lausanne University
+Hospital - CHUV (CH); Universitätsklinikum Erlangen (DE); Institut Gustave Roussy (FR);
+University of Pittsburgh (USA)).
+
+This authors thank Dr Kathrina Alexander, Dr Audrey Caudron, Dr Richard Doughty, 
+Dr Romain Dubois, Dr Thibaut Gioanni, Dr Camelia Radulescu, Dr Thomas Rialland, 
+Dr Pierre Romero and Dr Yannis Roxanis for their contributions to HistoTRAIN and HistoVAL.
+
