@@ -39,6 +39,7 @@ dependencies = [
   "shapely>=2.1.0",
   "joblib>=1.4.2",
   "xformers>=0.0.29.post1",
+  "huggingface-hub>=0.33.4",
 ]
 
 [project.urls]
