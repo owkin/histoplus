@@ -1,15 +1,20 @@
 """Detect tissue using Otsu's threshold."""
+
 import math
+
+import numpy as np
 from loguru import logger
 from openslide import OpenSlide
 from openslide.deepzoom import DeepZoomGenerator
-import numpy as np
-from skimage.filters import threshold_otsu
 from skimage.color import rgb2gray
+from skimage.filters import threshold_otsu
+
 from histoplus.helpers.tiling.optimal_mpp import get_tiling_slide_level
 
 
-def _apply_otsu_threshold(slide: OpenSlide, mask_width: int, mask_height: int) -> np.ndarray:
+def _apply_otsu_threshold(
+    slide: OpenSlide, mask_width: int, mask_height: int
+) -> np.ndarray:
     thumbnail = slide.get_thumbnail((mask_width, mask_height))
     img_arr = np.array(rgb2gray(thumbnail))
     thresh = threshold_otsu(img_arr)
@@ -36,10 +41,12 @@ def detect_tissue_on_wsi(
         deepzoom,
         mpp=target_mpp,
         default_mpp_max=default_mpp_max,
-        mpp_rtol=mpp_rtol
+        mpp_rtol=mpp_rtol,
     )
 
-    width_at_target_mpp, height_at_target_mpp = deepzoom.level_dimensions[dz_level_at_target_mpp]
+    width_at_target_mpp, height_at_target_mpp = deepzoom.level_dimensions[
+        dz_level_at_target_mpp
+    ]
 
     mask = _apply_otsu_threshold(slide, width_at_target_mpp, height_at_target_mpp)
 
@@ -47,9 +54,13 @@ def detect_tissue_on_wsi(
     num_rows = math.floor(height_at_target_mpp / tile_size_at_target_mpp)
 
     # Crop mask to make it reshapable (fix the math.floor)
-    mask_cropped = mask[:num_rows * tile_size_at_target_mpp, :num_cols * tile_size_at_target_mpp]
+    mask_cropped = mask[
+        : num_rows * tile_size_at_target_mpp, : num_cols * tile_size_at_target_mpp
+    ]
 
-    tiles = mask_cropped.reshape(num_rows, tile_size_at_target_mpp, num_cols, tile_size_at_target_mpp)
+    tiles = mask_cropped.reshape(
+        num_rows, tile_size_at_target_mpp, num_cols, tile_size_at_target_mpp
+    )
     tissue_scores = tiles.mean(axis=(1, 3))
 
     tissue_coords = np.array(np.nonzero(tissue_scores < matter_threshold))
