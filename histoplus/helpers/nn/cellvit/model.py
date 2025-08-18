@@ -2,14 +2,13 @@
 
 from abc import ABC, abstractmethod
 from collections import OrderedDict
-from typing import Any, Optional
+from typing import Any
 
 import torch
 from torch import nn
 from torch.nn.modules.module import _IncompatibleKeys
 
 from histoplus.helpers.nn.cellvit.decoder import (
-    MLP,
     CellViTNeck,
     DecoderBranch,
 )
@@ -120,7 +119,6 @@ class CellViT(CellViTBase):
         train_image_size: int,
         inference_image_size: int,
         backbone_weights_pretraining: PretrainedBackboneWeight = "aquavit_105k",
-        number_tissue_types: Optional[int] = None,
     ):
         super().__init__(
             cell_type_mapping,
@@ -133,10 +131,6 @@ class CellViT(CellViTBase):
 
         self.cell_type_mapping = cell_type_mapping
         self.number_cell_types = len(cell_type_mapping)
-
-        # TODO (PAB): This should be removed in later versions. We keep this property
-        # for backward compatibility with the V3 model.
-        self.number_tissue_types = number_tissue_types
 
         self.np_branch = DecoderBranch(
             num_classes=2,
@@ -162,14 +156,6 @@ class CellViT(CellViTBase):
             patch_size=self.patch_size,
         )
 
-        self.tc_branch = None
-        if self.number_tissue_types is not None:
-            self.tc_branch = MLP(
-                in_dim=self.embed_dim,
-                hidden_dim=self.skip_dim_1,
-                out_dim=self.number_tissue_types,
-            )
-
     def forward(self, x: torch.Tensor) -> OrderedDict[str, torch.Tensor]:
         """Do forward pass for cell detection and classification.
 
@@ -185,7 +171,6 @@ class CellViT(CellViTBase):
             - "np" : torch.Tensor : [B, 2, H, W]
             - "hv" : torch.Tensor : [B, 2, H, W]
             - "tp" : torch.Tensor : [B, number_cell_types, H, W]
-            - "tc" : torch.Tensor : [B, number_tissue_types]
         """
         z, n = self._extract_features(x)
 

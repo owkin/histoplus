@@ -77,7 +77,6 @@ class histoplus_cellvit_segmentor_40x(PretrainedSegmentor):
             cell_type_mapping=cell_type_mapping,
             mpp=mpp,
             output_layers=out_layers,
-            number_tissue_types=None,
             train_image_size=train_image_size,
             inference_image_size=inference_image_size,
         )
@@ -128,7 +127,6 @@ class histoplus_cellvit_segmentor_20x(PretrainedSegmentor):
             cell_type_mapping=cell_type_mapping,
             mpp=mpp,
             output_layers=out_layers,
-            number_tissue_types=None,
             train_image_size=train_image_size,
             inference_image_size=inference_image_size,
         )
