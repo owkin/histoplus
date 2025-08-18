@@ -10,7 +10,7 @@ from histoplus.helpers.nn.cellvit import CellViT
 
 
 ModuleCallbackType = Callable[
-    [dict[int, str], float, list[int], str, int, int], torch.nn.Module
+    [dict[int, str], float, list[int], int, int], torch.nn.Module
 ]
 
 
@@ -58,7 +58,7 @@ class histoplus_cellvit_segmentor_40x(PretrainedSegmentor):
     """
 
     name = "histoplus_cellvit_segmentor_40x"
-    weights = "histoplus_cellvit_segmentor_40x.pt"
+    filename = "histoplus_cellvit_segmentor_40x.pt"
     mpp = 0.25
 
     output_layers = [3, 5, 7, 11]
@@ -72,7 +72,6 @@ class histoplus_cellvit_segmentor_40x(PretrainedSegmentor):
         lambda cell_type_mapping,
         mpp,
         out_layers,
-        weights,
         train_image_size,
         inference_image_size: CellViT(
             cell_type_mapping=cell_type_mapping,
@@ -110,7 +109,7 @@ class histoplus_cellvit_segmentor_20x(PretrainedSegmentor):
     """
 
     name = "histoplus_cellvit_segmentor_20x"
-    weights = "histoplus_cellvit_segmentor_20x.pt"
+    filename = "histoplus_cellvit_segmentor_20x.pt"
     mpp = 0.5
 
     output_layers = [3, 5, 7, 11]
@@ -124,7 +123,6 @@ class histoplus_cellvit_segmentor_20x(PretrainedSegmentor):
         lambda cell_type_mapping,
         mpp,
         out_layers,
-        weights,
         train_image_size,
         inference_image_size: CellViT(
             cell_type_mapping=cell_type_mapping,
