@@ -14,7 +14,7 @@ ModuleCallbackType = Callable[
 ]
 
 
-HF_REPO_ID = "owkin/histoplus"
+HF_REPO_ID = "Owkin-Bioptimus/histoplus"
 
 
 class PretrainedSegmentor(torch.nn.Module):
