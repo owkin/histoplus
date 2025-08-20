@@ -45,44 +45,6 @@ def slide_data():
 
 
 @pytest.fixture
-def dummy_square():
-    """Create a dummy square polygon."""
-    return SegmentationPolygon(
-        cell_id=0,
-        cell_type="unit_square",
-        confidence=0.5,
-        coordinates=[[0, 0], [0, 1], [1, 1], [1, 0]],
-        centroid=[0.5, 0.5],
-    )
-
-
-@pytest.fixture
-def dummy_circle():
-    """Create a dummy circle polygon."""
-    return SegmentationPolygon(
-        cell_id=1,
-        cell_type="unit_circle",
-        confidence=0.3,
-        coordinates=[[np.cos(t), np.sin(t)] for t in np.linspace(0, 2 * np.pi, 100)],
-        centroid=[0, 0],
-    )
-
-
-@pytest.fixture
-def dummy_ellipse():
-    """Create a dummy ellipse polygon."""
-    return SegmentationPolygon(
-        cell_id=2,
-        cell_type="ellipse",
-        confidence=0.4,
-        coordinates=[
-            [1.4 * np.cos(t), 2.4 * np.sin(t)] for t in np.linspace(0, 2 * np.pi, 100)
-        ],
-        centroid=[0, 0],
-    )
-
-
-@pytest.fixture
 def dummy_polygon():
     """Create a dummy polygon."""
     return SegmentationPolygon(
