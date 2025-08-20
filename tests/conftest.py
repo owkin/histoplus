@@ -28,20 +28,11 @@ MOCK_SLIDE_PATH = (
     / "TCGA-G2-A2EC-01Z-00-DX4.8E4382A4-71F9-4BC3-89AA-09B4F1B54985.svs"
 )
 
-PHIKON_FEATURES_ARRAY_PATH = (
-    SAGEMAKER_ARTIFACT_BASE_PATH
-    / "features_phikon"
-    / "TCGA-G2-A2EC-01Z-00-DX4.8E4382A4-71F9-4BC3-89AA-09B4F1B54985.svs"
-    / "features.npy"
-)
-
 
 @pytest.fixture
 def slide_data():
     """Load slide for testing."""
-    slide = openslide.open_slide(str(MOCK_SLIDE_PATH))
-    features = np.load(PHIKON_FEATURES_ARRAY_PATH)
-    return slide, features
+    return openslide.open_slide(str(MOCK_SLIDE_PATH))
 
 
 @pytest.fixture
