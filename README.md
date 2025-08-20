@@ -10,6 +10,8 @@
 
 Corresponding pre-print paper can be found [here](https://arxiv.org/abs/2508.09926).
 
+🤗 You can request access to the weights of the model [here] (https://huggingface.co/Owkin-Bioptimus/histoplus).
+
 
 ## Table of Contents
 
