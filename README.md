@@ -118,7 +118,7 @@ histoplus --help
 histoplus \
     --slides ./TCGA-G2-A2EC-01Z-00-DX4.8E4382A4-71F9-4BC3-89AA-09B4F1B54985.svs \
     --export_dir ./ \
-    --batch_size 32
+    --batch_size 8
 ```
 
 ### Python API
@@ -148,7 +148,7 @@ results = extract(
     coords=tissue_coords,
     deepzoom_level=dz_level,
     segmentor=segmentor,
-    batch_size=32,
+    batch_size=8,
 )
 
 # Save results
