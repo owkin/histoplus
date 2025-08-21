@@ -1,10 +1,12 @@
 """Fixtures for the tests."""
 
+import hashlib
 import importlib.util
 import sys
+import urllib.error
+import urllib.request
 from pathlib import Path
 
-import numpy as np
 import openslide
 import pytest
 from typer.testing import CliRunner
@@ -14,19 +16,88 @@ from histoplus.helpers.nn.extractor import TimmExtractor
 from histoplus.helpers.segmentor import CellViTSegmentor
 
 
-def get_base_artifact_path():
-    """Get base artifact path."""
-    return Path(
-        "/home/sagemaker-user/custom-file-systems/efs/fs-09913c1f7db79b6fd/abstra-ci/artifacts"
-    )
-
-
-SAGEMAKER_ARTIFACT_BASE_PATH = get_base_artifact_path()
-
 MOCK_SLIDE_PATH = (
-    SAGEMAKER_ARTIFACT_BASE_PATH
-    / "TCGA-G2-A2EC-01Z-00-DX4.8E4382A4-71F9-4BC3-89AA-09B4F1B54985.svs"
+    "./artifacts/TCGA-G2-A2EC-01Z-00-DX4.8E4382A4-71F9-4BC3-89AA-09B4F1B54985.svs"
 )
+WSI_DOWNLOAD_URL = ""
+WSI_EXPECTED_HASH = ""
+
+
+def download_wsi_if_missing(
+    file_path: Path, download_url: str, expected_hash: str = None
+) -> bool:
+    """
+    Download WSI file if it doesn't exist locally.
+
+    Args:
+        file_path: Path where the file should be stored
+        download_url: URL to download the file from
+        expected_hash: Optional SHA256 hash for file verification
+
+    Returns
+    -------
+        bool: True if file exists or was successfully downloaded, False otherwise
+    """
+    if file_path.exists():
+        print(f"WSI file already exists at {file_path}")
+        return True
+
+    # Create parent directories if they don't exist
+    file_path.parent.mkdir(parents=True, exist_ok=True)
+
+    print(f"Downloading WSI file from {download_url} to {file_path}")
+
+    try:
+        # Download with progress indication
+        def report_progress(block_num, block_size, total_size):
+            if total_size > 0:
+                percent = min(100, (block_num * block_size * 100) / total_size)
+                print(f"\rDownload progress: {percent:.1f}%", end="", flush=True)
+
+        urllib.request.urlretrieve(download_url, file_path, reporthook=report_progress)
+        print()  # New line after progress
+
+        # Verify file hash if provided
+        if expected_hash:
+            print("Verifying file integrity...")
+            actual_hash = calculate_file_hash(file_path)
+            if actual_hash.lower() != expected_hash.lower():
+                file_path.unlink()  # Remove corrupted file
+                raise ValueError(
+                    f"File hash mismatch. Expected: {expected_hash}, Got: {actual_hash}"
+                )
+            print("File integrity verified.")
+
+        print(f"Successfully downloaded WSI file to {file_path}")
+        return True
+
+    except urllib.error.URLError as e:
+        print(f"Failed to download WSI file: {e}")
+        return False
+    except Exception as e:
+        print(f"Error downloading WSI file: {e}")
+        if file_path.exists():
+            file_path.unlink()  # Clean up partial download
+        return False
+
+
+def calculate_file_hash(file_path: Path) -> str:
+    """Calculate SHA256 hash of a file."""
+    hash_sha256 = hashlib.sha256()
+    with open(file_path, "rb") as f:
+        for chunk in iter(lambda: f.read(4096), b""):
+            hash_sha256.update(chunk)
+    return hash_sha256.hexdigest()
+
+
+@pytest.fixture(scope="session")
+def ensure_wsi_available():
+    """Ensure WSI file is available for testing."""
+    if not download_wsi_if_missing(
+        MOCK_SLIDE_PATH, WSI_DOWNLOAD_URL, WSI_EXPECTED_HASH
+    ):
+        pytest.skip("WSI file is not available and could not be downloaded")
+    return MOCK_SLIDE_PATH
 
 
 @pytest.fixture
