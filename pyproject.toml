@@ -7,14 +7,17 @@ packages = ["histoplus"]
 
 [project]
 name = "histoplus"
-version = "0.0.1"
+version = "1.0.0"
 description = "Extract cell mask from histology images"
 authors = [
     {name = "Pierre-Antoine Bannier", email = "pierre-antoine.bannier@owkin.com"},
     {name = "Benjamin Adjadj", email = "benjamin.adjadj@owkin.com"},
+    {name = "Guillaume Horent", email = "guillaume.horent@owkin.com"},
+    {name = "Lucie Gillet", email = "lucie.gillet@owkin.com"},
 ]
 readme = "README.md"
 requires-python = ">=3.10"
+license = {file = "LICENSE.md"}
 classifiers = [
     "Development Status :: 2 - Pre-Alpha",
     "Natural Language :: English",
