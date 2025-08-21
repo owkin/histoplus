@@ -84,7 +84,7 @@ sudo apt-get install openslide-tools
 brew install openslide
 ```
 
-### Install from PyPI (Recommended)
+### Install from PyPI (Coming Soon!)
 
 ```bash
 pip install histoplus
