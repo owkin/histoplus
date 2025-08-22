@@ -5,6 +5,8 @@ import torch
 
 from histoplus.helpers.constants import BIOPTIMUS_MEAN, BIOPTIMUS_STD
 
+from ..conftest import HF_HUB_NOT_AVAILABLE
+
 
 # Batch size
 B_SIZE = 4
@@ -12,6 +14,7 @@ B_SIZE = 4
 BIOPTIMUS_STATS = (BIOPTIMUS_MEAN, BIOPTIMUS_STD)
 
 
+@pytest.mark.skipif(HF_HUB_NOT_AVAILABLE, reason="Need access to a HF token")
 @pytest.mark.parametrize(
     "segmentor_fixture", [("cellvit_segmentor", 448, 0.25, *BIOPTIMUS_STATS)]
 )

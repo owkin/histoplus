@@ -2,13 +2,15 @@
 
 from unittest.mock import MagicMock
 
+import pytest
+
 from histoplus.cli.extract import extract_command
 from histoplus.helpers.constants import (
     OutputFileType,
 )
 from histoplus.helpers.data import SlideSegmentationData
 
-from ..conftest import MOCK_SLIDE_PATH
+from ..conftest import HF_HUB_NOT_AVAILABLE, MOCK_SLIDE_PATH
 
 
 TILE_SIZE = 224
@@ -26,6 +28,7 @@ def create_mock_context():
     return mock_ctx
 
 
+@pytest.mark.skipif(HF_HUB_NOT_AVAILABLE, reason="Need HF token.")
 def test_extract_cell_masks(tmp_path):
     """Test the extract_cell_masks CLI command."""
     slide_path = MOCK_SLIDE_PATH
