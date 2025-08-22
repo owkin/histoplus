@@ -5,6 +5,8 @@ import pytest
 from histoplus.extract import extract
 from histoplus.helpers.tissue_detection import detect_tissue_on_wsi
 
+from ..conftest import HF_HUB_NOT_AVAILABLE
+
 
 N_WORKERS = 4
 TILE_SIZE = 224
@@ -12,6 +14,7 @@ BATCH_SIZE = 16
 N_TILES = 3
 
 
+@pytest.mark.skipif(HF_HUB_NOT_AVAILABLE)
 @pytest.mark.parametrize("segmentor_fixture", [("cellvit_segmentor", 448, 0.25)])
 def test_extract(request, slide_data, segmentor_fixture):
     """Test the extract endpoint."""
