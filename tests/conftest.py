@@ -19,8 +19,8 @@ from histoplus.helpers.segmentor import CellViTSegmentor
 MOCK_SLIDE_PATH = (
     "./artifacts/TCGA-G2-A2EC-01Z-00-DX4.8E4382A4-71F9-4BC3-89AA-09B4F1B54985.svs"
 )
-WSI_DOWNLOAD_URL = ""
-WSI_EXPECTED_HASH = ""
+WSI_DOWNLOAD_URL = "https://openslide.cs.cmu.edu/download/openslide-testdata/Aperio/CMU-1-JP2K-33005.svs"
+WSI_EXPECTED_HASH = "9a1923cd9bcb260ba4d99d64f8d6e32550648c332ba48817f920662f3a513420"
 
 
 def download_wsi_if_missing(
