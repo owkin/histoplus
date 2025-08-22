@@ -1,8 +1,8 @@
 """Fixtures for the tests."""
 
-import os
 import hashlib
 import importlib.util
+import os
 import sys
 import urllib.error
 import urllib.request
@@ -17,7 +17,7 @@ from histoplus.helpers.nn.extractor import TimmExtractor
 from histoplus.helpers.segmentor import CellViTSegmentor
 
 
-MOCK_SLIDE_PATH = "./CMU-1-JP2K-33005.svs"
+MOCK_SLIDE_PATH = Path("./CMU-1-JP2K-33005.svs")
 WSI_DOWNLOAD_URL = "https://openslide.cs.cmu.edu/download/openslide-testdata/Aperio/CMU-1-JP2K-33005.svs"
 WSI_EXPECTED_HASH = "9a1923cd9bcb260ba4d99d64f8d6e32550648c332ba48817f920662f3a513420"
 

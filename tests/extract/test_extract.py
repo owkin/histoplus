@@ -14,7 +14,7 @@ BATCH_SIZE = 16
 N_TILES = 3
 
 
-@pytest.mark.skipif(HF_HUB_NOT_AVAILABLE)
+@pytest.mark.skipif(HF_HUB_NOT_AVAILABLE, reason="Need access to a HF token")
 @pytest.mark.parametrize("segmentor_fixture", [("cellvit_segmentor", 448, 0.25)])
 def test_extract(request, slide_data, segmentor_fixture):
     """Test the extract endpoint."""
