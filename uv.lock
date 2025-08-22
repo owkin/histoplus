@@ -268,7 +268,7 @@ wheels = [
 
 [[package]]
 name = "histoplus"
-version = "0.0.1"
+version = "1.0.0"
 source = { editable = "." }
 dependencies = [
     { name = "huggingface-hub" },
