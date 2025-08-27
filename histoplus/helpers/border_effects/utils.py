@@ -39,7 +39,13 @@ def build_cell_polygons(
         leave=False,
         disable=bool(verbose == 0),
     ):
-        polygon = Polygon(cell.contour)
+        try:
+            polygon = Polygon(cell.contour)
+        except ValueError:
+            # Some polygons have a degenerate shape with only 2 points
+            # (i.e. 4 coordinates) which prevents shapely from creating
+            # a shell. We skip those cells.
+            continue
 
         if not polygon.is_valid:
             polygon = _fix_invalid_polygon(polygon)
