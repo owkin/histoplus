@@ -51,6 +51,8 @@ HistoPLUS introduces a CellViT architecture incorporating a state-of-the-art spe
 - 📁 **Multiple formats**: Supports various whole slide image formats
 - 🔬 **Adaptable to multiple magnification**: Supports 20x and 40x magnification
 
+If you wish to convert the output prediction to a GeoJSON format (to visualize the predictions in QuPath for instance), you can refer to [#23](https://github.com/owkin/histoplus/issues/23).
+
 ## Technology Stack & Model Details
 
 **Core Dependencies:**
