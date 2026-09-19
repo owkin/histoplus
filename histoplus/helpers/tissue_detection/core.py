@@ -61,6 +61,19 @@ def detect_tissue_on_wsi(
     num_cols = math.floor(width_at_target_mpp / tile_size_at_target_mpp)
     num_rows = math.floor(height_at_target_mpp / tile_size_at_target_mpp)
 
+    # `slide.get_thumbnail()` preserves aspect ratio, so on some slides the
+    # returned mask is smaller in one dimension than
+    # (width_at_target_mpp, height_at_target_mpp). num_rows/num_cols above
+    # are computed from the unclamped target dimensions, so they can then
+    # overshoot the actual mask shape and the reshape below raises
+    # `ValueError: cannot reshape array of size ... into shape (...)`
+    # (see owkin/histoplus#26). Clamp to what the mask actually supports.
+    mask_height, mask_width = mask.shape
+    if mask_height < num_rows * tile_size_at_target_mpp:
+        num_rows = math.floor(mask_height / tile_size_at_target_mpp)
+    if mask_width < num_cols * tile_size_at_target_mpp:
+        num_cols = math.floor(mask_width / tile_size_at_target_mpp)
+
     # Crop mask to make it reshapable (fix the math.floor)
     mask_cropped = mask[
         : num_rows * tile_size_at_target_mpp, : num_cols * tile_size_at_target_mpp
