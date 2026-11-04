@@ -78,7 +78,7 @@ class CellViTSegmentor(Segmentor):
         )
 
         model.load_state_dict(
-            torch.load(weights_path, weights_only=False, map_location="cpu")
+            torch.load(weights_path, weights_only=True, map_location="cpu")
         )
 
         return cls(
